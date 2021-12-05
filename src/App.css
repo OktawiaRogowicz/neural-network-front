@@ -1,38 +1,70 @@
-.App {
+button {
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.8);
+  border: 0;
+  display: inline-block;
+  width: 100px;
+}
+
+.my-collapsible {
+  background-color: green;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.my-collapsible__content {
+  overflow: hidden;
+  background: gold;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.my-collapsible__content-inner {
+  padding: 1rem;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+}
+
+.number {
+  font-variant-numeric: tabular-nums;
+  min-width: 3em;
+  display: inline-block;
+  text-align: left;
+}
+
+.timer__content {
+  background: gold;
+  height: 15vh;
+  width: 100vw;
+  display: -webkit-box;
+  -webkit-box-pack: justify;
+  -webkit-box-align: center;
+  display: -moz-box;
+  -moz-box-pack: justify;
+  -moz-box-align: center;
+  display: -ms-flexbox;
+  -ms-flex-pack: justify;
+  -ms-flex-align: center;
+  display: box;
+  box-pack: justify;
+  box-align: center;
+}
+
+.inline-block-child {
+
+}
+
+canvas {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);               
+}
+
+.game-container {
+  height: 85vh;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.canvas-container {
+  height: 85vh;
+  align-items: center;
+  justify-content: center;
 }
