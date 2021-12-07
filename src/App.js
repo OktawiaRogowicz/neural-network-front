@@ -85,6 +85,17 @@ function App() {
     });
   }
 
+  const Emoji = props => (
+    <span
+      className="emoji"
+      role="img"
+      aria-label={props.label ? props.label : ""}
+      aria-hidden={props.label ? "false" : "true"}
+    >
+      {props.symbol}
+    </span>
+  )
+
   return (
     <main>
       
@@ -98,21 +109,29 @@ function App() {
                 transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
               }}
               >
-                <p>
-                  Try and draw
-                </p>
-                <h1>
-                    {currentWord}
-                </h1>
-                <p>
-                  in 15 seconds
-                </p>
-
-                <PlayButton onClick={ () => { onToggle(); setIsGameStarted(true) }}/>
+                <div>
+                  <p>Try and draw</p>
+                  <h1>{currentWord}</h1>
+                  <p style={{marginBottom: '5vh'}}>in 15 seconds</p>
+                  <PlayButton onClick={ () => { onToggle(); setIsGameStarted(true) }}/>
+                </div>
               </div>
             </div>
             <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
-              <PlayButton onClick={ () => { onToggle(); hideStart()}}/>
+              
+              <div class="welcome">
+              <p><b>{`Hej! `}</b><Emoji symbol="👋"/></p> 
+              <p style={{marginBottom: '5vh'}}>{`
+                Skoro tutaj jesteś, zdecydował*ś się pomóc mi w pracy inynierskiej. Dziękuję! :)
+
+                Celem mojej pracy jest odtworzenie gry Quick, Draw!, którą stworzyło Google. Będę tworzyć sieć neurnonową, czyli AI, które spróbuje rozpoznać, czy narysowano obrazek zgodny z wylosowanym tematem. Ale bazę danych zbieram sama - i dlatego właśnie potrzebuję pomocy!
+
+                Ta strona jest stworzona właśnie po to - twoim zadaniem będzie dziesięć razy w przeciągu 15 sekund narysować otrzymane hasło, zapisać je lokalnie na komputerze, a potem mi je przesłać. Zabawa na razie na tym się kończy - ale za to za miesiąc powinnam zarzucić stroną, na której po kazdym rysunku sieć będzie próbowała go odgadnąć, a do nauczenia jej tego uzyte były obrazki was wszystkich!
+                
+                Gotów?
+                `}</p>
+                <PlayButton onClick={ () => { onToggle(); hideStart()}}/>
+              </div>
             </div>
           </div>
 
@@ -120,7 +139,7 @@ function App() {
           { isGameStarted && <div className="parent timer__content">
             <div/>
             <div class='child inline-block-child'>
-              {currentWord}
+              <h1>{currentWord}</h1>
             </div>
             <div/>
             <div class='child inline-block-child'>
@@ -128,21 +147,28 @@ function App() {
             </div>
             <div/>
           </div> }
-
-          <div class='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
-            <canvas id='my-canvas'
-              onMouseDown={startDrawing}
-              onMouseUp={finishDrawing}
-              onMouseMove={draw}
-              onDoubleClick={clear}
-              ref={canvasRef}
-            />
+          
+          <div class='game-container-inner'>
+            <h1>Draw here!</h1>
           </div>
-          <div style={ isGameFinished ? {} : { display: 'none' }}>
-            Time has finished!
-            Save your work and continue.
-            <button style={{color: 'gold'}} onClick={handleDownload}> Save</button> 
-            <PlayButton style={{color: 'gold'}} onClick={ () => { onToggle(); startRound() }}/>
+          <div class='game-container-inner'>
+            <div class='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
+              <canvas id='my-canvas'
+                onMouseDown={startDrawing}
+                onMouseUp={finishDrawing}
+                onMouseMove={draw}
+                onDoubleClick={clear}
+                ref={canvasRef}
+              />
+            </div>
+          </div>
+          <div class='game-container-inner'>
+            <div style={ isGameFinished ? {} : { display: 'none' }}>
+              <p>{`Time has finished!
+              Save your work and continue.`}</p>
+              <button style={{color: 'gold'}} onClick={handleDownload}> Save</button> 
+              <PlayButton style={{color: 'gold'}} onClick={ () => { onToggle(); startRound() }}/>
+            </div>
           </div>
         </div>
       </div>

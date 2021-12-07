@@ -49,7 +49,7 @@ function Timer(props) {
   if(seconds < 10) seconds = '0'+seconds;
 
   return (
-    <div style={{width: 100, height: 100}}>
+    <div style={{width: 80, height: 80}}>
       <CircularProgressbar
         value={percentage}
         text={minutes + ':' + seconds}

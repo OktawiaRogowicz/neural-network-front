@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Schoolbell&display=swap');
+
+p {
+  white-space: pre-line;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+
 button {
   background-color: transparent;
   color: rgba(255, 255, 255, 0.8);
@@ -7,8 +23,18 @@ button {
 }
 
 .my-collapsible {
-  background-color: green;
+  background-color: gold;
+  align-items: center;
   text-align: center;
+}
+
+.welcome {
+  position: relative;
+  top: 50%;
+  width: 65vw;
+  transform: translateY(-50%);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .my-collapsible__content {
@@ -19,6 +45,14 @@ button {
 .my-collapsible__content-inner {
   padding: 1rem;
   min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.my-collapsible__content-inner h1{
+  font-family: 'Schoolbell', cursive;
+  font-size: 50px;
 }
 
 .number {
@@ -46,8 +80,9 @@ button {
   box-align: center;
 }
 
-.inline-block-child {
-
+.inline-block-child h1{
+  font-family: 'Schoolbell', cursive;
+  font-size: 25px;
 }
 
 canvas {
@@ -59,12 +94,20 @@ canvas {
 
 .game-container {
   height: 85vh;
-  align-items: center;
+}
+
+.game-container-inner {
+  margin: auto;
+  display: flex;
   justify-content: center;
+  align-items: center;
+}
+
+.game-container-inner h1{
+  font-family: 'Schoolbell', cursive;
+  font-size: 20px;
 }
 
 .canvas-container {
-  height: 85vh;
-  align-items: center;
-  justify-content: center;
+  height: 400px;
 }
