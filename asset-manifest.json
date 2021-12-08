@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/neural-network-front/static/css/main.a4e5b5f0.chunk.css",
-    "main.js": "/neural-network-front/static/js/main.684a9916.chunk.js",
-    "main.js.map": "/neural-network-front/static/js/main.684a9916.chunk.js.map",
+    "main.js": "/neural-network-front/static/js/main.b6042423.chunk.js",
+    "main.js.map": "/neural-network-front/static/js/main.b6042423.chunk.js.map",
     "runtime-main.js": "/neural-network-front/static/js/runtime-main.bd729cc2.js",
     "runtime-main.js.map": "/neural-network-front/static/js/runtime-main.bd729cc2.js.map",
     "static/css/2.6c0f60ba.chunk.css": "/neural-network-front/static/css/2.6c0f60ba.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.6c0f60ba.chunk.css",
     "static/js/2.e624d779.chunk.js",
     "static/css/main.a4e5b5f0.chunk.css",
-    "static/js/main.684a9916.chunk.js"
+    "static/js/main.b6042423.chunk.js"
   ]
 }
