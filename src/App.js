@@ -8,7 +8,8 @@ import FileSaver from 'file-saver';
 
 function App() {
 
-  const currentWord = String('generated word')
+  const listOfCategories = ['cookie', 'crab', 'carrot', 'bat', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
+  const [index, setIndex] = useState(0)
 
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
@@ -19,6 +20,7 @@ function App() {
   const [isGameFinished, setIsGameFinished] = useState(false)
 
   const [isStarted, setIsStarted] = useState(true)
+  const [isFinished, setIsFinished] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -45,6 +47,8 @@ function App() {
     setIsDrawing(true)
   }
 
+  const getWord = () => { return listOfCategories[index]}
+
   const finishDrawing = () => {
     contextRef.current.closePath()
     setIsDrawing(false)
@@ -69,13 +73,20 @@ function App() {
   }
 
   const startRound = () => {
+    if(isGameFinished) {
+      var i = index;
+      setIndex(i + 1)
+    }
+
     setIsGameStarted(false)
     setIsGameFinished(false)
+    changeCanvasBorder('3px solid gold');
     clear();
   }
 
   const stopTimer = () => {
     setIsGameFinished(true)
+    changeCanvasBorder('3px solid lightgray');
   }
 
   const handleDownload = () => {
@@ -83,6 +94,11 @@ function App() {
     canvas.toBlob(function(blob) {
       FileSaver.saveAs(blob, "image.png");
     });
+  }
+
+  const changeCanvasBorder = (style) => {
+    const canvas = canvasRef.current;
+    canvas.style.border = style;
   }
 
   const Emoji = props => (
@@ -111,7 +127,7 @@ function App() {
               >
                 <div>
                   <p>Try and draw</p>
-                  <h1>{currentWord}</h1>
+                  <h1>{getWord()}</h1>
                   <p style={{marginBottom: '5vh'}}>in 15 seconds</p>
                   <PlayButton onClick={ () => { onToggle(); setIsGameStarted(true) }}/>
                 </div>
@@ -122,7 +138,7 @@ function App() {
               <div class="welcome">
               <p><b>{`Hej! `}</b><Emoji symbol="👋"/></p> 
               <p style={{marginBottom: '5vh'}}>{`
-                Skoro tutaj jesteś, zdecydował*ś się pomóc mi w pracy inynierskiej. Dziękuję! :)
+                Skoro tutaj jesteś, zdecydował*ś się pomóc mi w pracy inzynierskiej. Dziękuję! :)
 
                 Celem mojej pracy jest odtworzenie gry Quick, Draw!, którą stworzyło Google. Będę tworzyć sieć neurnonową, czyli AI, które spróbuje rozpoznać, czy narysowano obrazek zgodny z wylosowanym tematem. Ale bazę danych zbieram sama - i dlatego właśnie potrzebuję pomocy!
 
@@ -130,7 +146,7 @@ function App() {
                 
                 Gotów?
                 `}</p>
-                <PlayButton onClick={ () => { onToggle(); hideStart()}}/>
+                <PlayButton onClick={ () => { onToggle(); hideStart(); startRound()}}/>
               </div>
             </div>
           </div>
@@ -139,7 +155,7 @@ function App() {
           { isGameStarted && <div className="parent timer__content">
             <div/>
             <div class='child inline-block-child'>
-              <h1>{currentWord}</h1>
+              <h1>{getWord()}</h1>
             </div>
             <div/>
             <div class='child inline-block-child'>
@@ -162,14 +178,18 @@ function App() {
               />
             </div>
           </div>
-          <div class='game-container-inner'>
             <div style={ isGameFinished ? {} : { display: 'none' }}>
-              <p>{`Time has finished!
-              Save your work and continue.`}</p>
-              <button style={{color: 'gold'}} onClick={handleDownload}> Save</button> 
-              <PlayButton style={{color: 'gold'}} onClick={ () => { onToggle(); startRound() }}/>
+              <div class='game-container-inner'>
+                <p>{`Time has finished!
+                Save your work and continue.`}</p>
+              </div>
+              <div class='game-container-inner'>
+                <button style={{color: 'gold'}} onClick={handleDownload}> Save</button> 
+              </div>
+              <div class='game-container-inner'>
+                <PlayButton style={{color: 'gold', width: 60, height: 60}} onClick={ () => { onToggle(); startRound() }}/>
+              </div>
             </div>
-          </div>
         </div>
       </div>
       )}/>
