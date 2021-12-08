@@ -135,7 +135,7 @@ function App() {
             </div>
             <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
               
-              <div class="welcome">
+              <div className="welcome">
               <p><b>{`Hej! `}</b><Emoji symbol="👋"/></p> 
               <p style={{marginBottom: '5vh'}}>{`
                 Skoro tutaj jesteś, zdecydował*ś się pomóc mi w pracy inzynierskiej. Dziękuję! :)
@@ -151,24 +151,24 @@ function App() {
             </div>
           </div>
 
-        <div class='game-container' style={ isGameStarted ? {} : {display: 'none'}}>
+        <div className='game-container' style={ isGameStarted ? {} : {display: 'none'}}>
           { isGameStarted && <div className="parent timer__content">
             <div/>
-            <div class='child inline-block-child'>
+            <div className='child inline-block-child'>
               <h1>{getWord()}</h1>
             </div>
             <div/>
-            <div class='child inline-block-child'>
+            <div className='child inline-block-child'>
               <Timer stop={stopTimer} ref={timerRef}/>
             </div>
             <div/>
           </div> }
           
-          <div class='game-container-inner'>
+          <div className='game-container-inner'>
             <h1>Draw here!</h1>
           </div>
-          <div class='game-container-inner'>
-            <div class='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
+          <div className='game-container-inner'>
+            <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
               <canvas id='my-canvas'
                 onMouseDown={startDrawing}
                 onMouseUp={finishDrawing}
@@ -179,14 +179,14 @@ function App() {
             </div>
           </div>
             <div style={ isGameFinished ? {} : { display: 'none' }}>
-              <div class='game-container-inner'>
+              <div className='game-container-inner'>
                 <p>{`Time has finished!
-                Save your work and continue.`}</p>
+                Save your work and continue`}</p>
               </div>
-              <div class='game-container-inner'>
+              <div className='game-container-inner'>
                 <button style={{color: 'gold'}} onClick={handleDownload}> Save</button> 
               </div>
-              <div class='game-container-inner'>
+              <div className='game-container-inner'>
                 <PlayButton style={{color: 'gold', width: 60, height: 60}} onClick={ () => { onToggle(); startRound() }}/>
               </div>
             </div>
