@@ -8,7 +8,7 @@ import FileSaver from 'file-saver';
 
 function App() {
 
-  const listOfCategories = ['cookie', 'crab', 'carrot', 'bat', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
+  const listOfCategories = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
   const [index, setIndex] = useState(0)
 
   const canvasRef = useRef(null)
@@ -77,11 +77,15 @@ function App() {
       var i = index;
       setIndex(i + 1)
     }
+    if(index == 1) {
+      setIsFinished(true)
+    }
 
     setIsGameStarted(false)
     setIsGameFinished(false)
     changeCanvasBorder('3px solid gold');
     clear();
+
   }
 
   const stopTimer = () => {
@@ -112,6 +116,43 @@ function App() {
     </span>
   )
 
+  function DrawText(props) {
+    console.log("draw");
+    return (<div>
+      <p>Try and draw</p>
+      <h1>{getWord()}</h1>
+      <p style={{marginBottom: '5vh'}}>in 15 seconds</p>
+      <PlayButton onClick={ () => { props.on(); setIsGameStarted(true) }}/>
+    </div>);
+  }
+  
+  function FinishedText(props) {
+    console.log("finished");
+    let url = "https://drive.google.com/drive/folders/1EDM_9kNhp_OL_SH8GiF8XVE2j_hH2Qjm?usp=sharing";
+    return (<div>
+      <p>{`
+      To wszystko!
+      
+      Zapisane obrazki mozesz przeslac mi na discordzie (Supernova#6608)
+      lub wrzucić do tego dysku Google:`}</p> <a href={url}> klik </a> <p style={{marginBottom: '5vh'}}>{`
+
+      Za około miesiąc powinna zaś powstać nowa wersja tego oto frontu - juz w formie zabawy z siecia neuronowa. ;)
+
+      `}</p>
+      <p><b>{`Dziękuję za pomoc! `}</b><Emoji symbol="💛"/></p> 
+      <p style={{marginBottom: '5vh'}}>{`Jezeli chcesz zagrac ponownie - kliknij przycisk.`}</p>
+      <PlayButton onClick={ () => window.location.reload(true) }/>
+    </div>);
+  }
+
+  function CollapsibleText(props) {
+    const isFinished = props.isFinished;
+    if (!isFinished) {
+      return <DrawText on={() => props.on()}/>
+    }
+    return <FinishedText />;
+  }
+
   return (
     <main>
       
@@ -125,12 +166,7 @@ function App() {
                 transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
               }}
               >
-                <div>
-                  <p>Try and draw</p>
-                  <h1>{getWord()}</h1>
-                  <p style={{marginBottom: '5vh'}}>in 15 seconds</p>
-                  <PlayButton onClick={ () => { onToggle(); setIsGameStarted(true) }}/>
-                </div>
+                <CollapsibleText isFinished={isFinished} on={() => onToggle()}/>
               </div>
             </div>
             <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
@@ -191,6 +227,7 @@ function App() {
               </div>
             </div>
         </div>
+
       </div>
       )}/>
     </main>
