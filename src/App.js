@@ -77,7 +77,7 @@ function App() {
       var i = index;
       setIndex(i + 1)
     }
-    if(index == 1) {
+    if(index == 9) {
       setIsFinished(true)
     }
 
@@ -96,7 +96,7 @@ function App() {
   const handleDownload = () => {
     var canvas = document.getElementById("my-canvas");
     canvas.toBlob(function(blob) {
-      FileSaver.saveAs(blob, "image.png");
+      FileSaver.saveAs(blob, getWord + ".png");
     });
   }
 
@@ -216,7 +216,7 @@ function App() {
           </div>
             <div style={ isGameFinished ? {} : { display: 'none' }}>
               <div className='game-container-inner'>
-                <p>{`Time has finished!
+                <p>{`Time's up'!
                 Save your work and continue`}</p>
               </div>
               <div className='game-container-inner'>
