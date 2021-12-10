@@ -5,6 +5,7 @@ import PlayButton from "./PlayButton";
 import SlideToggle from "react-slide-toggle";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import FileSaver from 'file-saver';
+import update from 'immutability-helper';
 
 function App() {
 
@@ -21,6 +22,8 @@ function App() {
 
   const [isStarted, setIsStarted] = useState(true)
   const [isFinished, setIsFinished] = useState(false)
+
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -74,10 +77,18 @@ function App() {
 
   const startRound = () => {
     if(isGameFinished) {
+      var canvas = document.getElementById("my-canvas");
+    
+      canvas.toBlob(function(blob) {
+        var file = new File([blob], getWord());
+        setData(oldData => [...oldData, file] )
+      });
+      console.log(data);
+
       var i = index;
       setIndex(i + 1)
     }
-    if(index == 9) {
+    if(index == 1) {
       setIsFinished(true)
     }
 
@@ -91,13 +102,23 @@ function App() {
   const stopTimer = () => {
     setIsGameFinished(true)
     changeCanvasBorder('3px solid lightgray');
-  }
+  } 
 
   const handleDownload = () => {
     var canvas = document.getElementById("my-canvas");
+    
     canvas.toBlob(function(blob) {
-      FileSaver.saveAs(blob, getWord + ".png");
+      FileSaver.saveAs(blob, getWord() + ".png");
+      console.log(data);
     });
+  }
+
+  const handleZipDownload = (props) => {
+    var binaryData = [];
+    binaryData.push(data);
+    var blob = new Blob(binaryData, {type: "application/zip"});
+    var fileName = "dataset.zip";
+    FileSaver.saveAs(blob, fileName);
   }
 
   const changeCanvasBorder = (style) => {
@@ -140,7 +161,8 @@ function App() {
 
       `}</p>
       <p><b>{`Dziękuję za pomoc! `}</b><Emoji symbol="💛"/></p> 
-      <p style={{marginBottom: '5vh'}}>{`Jezeli chcesz zagrac ponownie - kliknij przycisk.`}</p>
+      <p style={{marginBottom: '5vh'}}>{`Jezeli chcesz zagrac ponownie - kliknij przycisk. Zeby pobrac zipa/paczke swoich plikow, kliknij Save.`}</p>
+      <button style={{color: 'gold'}} onClick={handleZipDownload}> Save</button> 
       <PlayButton onClick={ () => window.location.reload(true) }/>
     </div>);
   }
@@ -191,7 +213,7 @@ function App() {
           { isGameStarted && <div className="parent timer__content">
             <div/>
             <div className='child inline-block-child'>
-              <h1>{getWord()}</h1>
+              <h1>{getWord()} ({index + 1}/10)</h1>
             </div>
             <div/>
             <div className='child inline-block-child'>
@@ -201,7 +223,7 @@ function App() {
           </div> }
           
           <div className='game-container-inner'>
-            <h1>Draw here!</h1>
+            <h1>Draw here! Double click to clear the canvas.</h1>
           </div>
           <div className='game-container-inner'>
             <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
