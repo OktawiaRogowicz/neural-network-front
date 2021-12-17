@@ -15,7 +15,7 @@ function Timer(props) {
   const isPausedRef = useRef(isPaused);
   const modeRef = useRef(mode);
 
-  const workMinutes = 0.25;
+  const workMinutes = 0.05; // <- 3 sekundy
 
   function tick() {
     secondsLeftRef.current--;

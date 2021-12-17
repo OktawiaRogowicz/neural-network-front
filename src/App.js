@@ -6,6 +6,8 @@ import SlideToggle from "react-slide-toggle";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import FileSaver from 'file-saver';
 import update from 'immutability-helper';
+import JSZip from 'jszip';
+import Axios from 'axios';
 
 function App() {
 
@@ -24,6 +26,7 @@ function App() {
   const [isFinished, setIsFinished] = useState(false)
 
   const [data, setData] = useState([]);
+  const zipRef = useRef(null)
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,6 +44,9 @@ function App() {
     context.strokeStyle = "black"
     context.lineWidth = 10
     contextRef.current = context;
+
+    var zip = new JSZip();
+    zipRef.current = zip;
   }, [])
 
   const startDrawing = ({nativeEvent}) => {
@@ -80,15 +86,18 @@ function App() {
       var canvas = document.getElementById("my-canvas");
     
       canvas.toBlob(function(blob) {
-        var file = new File([blob], getWord());
+        var file = new File([blob], getWord() + ".png");
         setData(oldData => [...oldData, file] )
+        uploadImage(file, getWord());
+        //const zip = zipRef.current;
+        //zip.file(getWord() + ".png", blob, {base64: true}); 
       });
       console.log(data);
 
       var i = index;
       setIndex(i + 1)
     }
-    if(index == 1) {
+    if(index == 9) {
       setIsFinished(true)
     }
 
@@ -113,12 +122,38 @@ function App() {
     });
   }
 
-  const handleZipDownload = (props) => {
-    var binaryData = [];
-    binaryData.push(data);
-    var blob = new Blob(binaryData, {type: "application/zip"});
-    var fileName = "dataset.zip";
-    FileSaver.saveAs(blob, fileName);
+  const handleZipDownload = () => {
+    var zip = new JSZip();
+    for (var i = 0; i < data.length; i++) {
+      var f = data[i];
+      zip.file(f.name, f);
+  }
+    zip.generateAsync({type:"blob"})
+    .then(function(content) {
+        FileSaver.saveAs(content, "set.zip");
+    });
+  }
+
+  const uploadImage = (f, categoryname) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(f);
+    reader.onloadend = () => {
+      upload(reader.result, categoryname);
+    }
+  }
+
+  const upload = async (base64EncodedImage, categoryname) => {
+    console.log(base64EncodedImage);
+    var cn = "neural_" + categoryname;
+    try {
+      await fetch('/api/upload', {
+        method: 'POST',
+        body: JSON.stringify({data: base64EncodedImage, name: cn}),
+        headers: { 'Content-Type': 'application/json'},
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const changeCanvasBorder = (style) => {
@@ -148,7 +183,6 @@ function App() {
   }
   
   function FinishedText(props) {
-    console.log("finished");
     let url = "https://drive.google.com/drive/folders/1EDM_9kNhp_OL_SH8GiF8XVE2j_hH2Qjm?usp=sharing";
     return (<div>
       <p>{`
@@ -162,8 +196,12 @@ function App() {
       `}</p>
       <p><b>{`Dziękuję za pomoc! `}</b><Emoji symbol="💛"/></p> 
       <p style={{marginBottom: '5vh'}}>{`Jezeli chcesz zagrac ponownie - kliknij przycisk. Zeby pobrac zipa/paczke swoich plikow, kliknij Save.`}</p>
-      <button style={{color: 'gold'}} onClick={handleZipDownload}> Save</button> 
+      <div className='game-container-inner'>
+      <button className='button2' onClick={handleZipDownload}> Save</button> 
+      </div>
+      <div className='game-container-inner'>
       <PlayButton onClick={ () => window.location.reload(true) }/>
+      </div>
     </div>);
   }
 
@@ -238,11 +276,11 @@ function App() {
           </div>
             <div style={ isGameFinished ? {} : { display: 'none' }}>
               <div className='game-container-inner'>
-                <p>{`Time's up'!
-                Save your work and continue`}</p>
+                <p>{`Time's up!
+                Save this particular artwork and / or continue`}</p>
               </div>
               <div className='game-container-inner'>
-                <button style={{color: 'gold'}} onClick={handleDownload}> Save</button> 
+                <button className='button1' onClick={handleDownload}> Save</button> 
               </div>
               <div className='game-container-inner'>
                 <PlayButton style={{color: 'gold', width: 60, height: 60}} onClick={ () => { onToggle(); startRound() }}/>
