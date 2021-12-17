@@ -1,6 +1,7 @@
 const express = require('express');
 
 const app = express();
+const path = require('path');
 const { cloudinary } = require('./utils/cloudinary');
 var cors = require('cors');
 const { application } = require('express');
