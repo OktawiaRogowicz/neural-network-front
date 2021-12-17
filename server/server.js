@@ -8,11 +8,9 @@ const { application } = require('express');
 // const { default: axios } = require('axios');
 
 if (process.env.NODE_ENV === "production") {
-    console.log('???');
     app.use(express.static('build'));
     app.get('*', (req, res) => {
-        console.log(__dirname, 'build', 'index.html');
-        res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
+        res.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'));
     })
 }
 
