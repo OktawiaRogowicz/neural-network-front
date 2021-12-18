@@ -12,7 +12,7 @@ import Axios from 'axios';
 function App() {
 
   const listOfCategories = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
-  const listOfCategoriesPolish = ['ciasteczko', 'smartfon', 'marchewka', 'brokuł', 'lampa stojąca', 'trawa', 'księzyc', 'kubek', 'miecz', 'słońce']
+  const listOfCategoriesPolish = ['ciasteczko', 'smartfon', 'marchewka', 'brokul', 'lampa stojaca', 'trawa', 'ksiezyc', 'kubek', 'miecz', 'slonce']
   const [index, setIndex] = useState(0)
 
   const canvasRef = useRef(null)
