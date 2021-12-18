@@ -12,6 +12,7 @@ import Axios from 'axios';
 function App() {
 
   const listOfCategories = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
+  const listOfCategoriesPolish = ['ciasteczko', 'smartfon', 'marchewka', 'brokuł', 'lampa stojąca', 'trawa', 'księzyc', 'kubek', 'miecz', 'słońce']
   const [index, setIndex] = useState(0)
 
   const canvasRef = useRef(null)
@@ -57,6 +58,8 @@ function App() {
   }
 
   const getWord = () => { return listOfCategories[index]}
+
+  const getWordPolish = () => { return listOfCategoriesPolish[index]}
 
   const finishDrawing = () => {
     contextRef.current.closePath()
@@ -145,6 +148,7 @@ function App() {
   const upload = async (base64EncodedImage, categoryname) => {
     console.log(base64EncodedImage);
     var cn = "neural_" + categoryname;
+    console.log(cn);
     try {
       await fetch('/api/upload', {
         method: 'POST',
@@ -238,7 +242,11 @@ function App() {
 
                 Celem mojej pracy jest odtworzenie gry Quick, Draw!, którą stworzyło Google. Będę tworzyć sieć neurnonową, czyli AI, które spróbuje rozpoznać, czy narysowano obrazek zgodny z wylosowanym tematem. Ale bazę danych zbieram sama - i dlatego właśnie potrzebuję pomocy!
 
-                Ta strona jest stworzona właśnie po to - twoim zadaniem będzie dziesięć razy w przeciągu 15 sekund narysować otrzymane hasło, zapisać je lokalnie na komputerze, a potem mi je przesłać. Zabawa na razie na tym się kończy - ale za to za miesiąc powinnam zarzucić stroną, na której po kazdym rysunku sieć będzie próbowała go odgadnąć, a do nauczenia jej tego uzyte były obrazki was wszystkich!
+                Ta strona jest stworzona właśnie po to - twoim zadaniem będzie dziesięć razy w przeciągu 15 sekund narysować otrzymane hasło!
+                
+                Narysowane rysunki AUTOMATYCZNIE lądują na stworzonym przeze mnie serwerze i bazie danych w momencie, w którym klikasz przycisk DALEJ. SAVE istnieje, by zapisac go lokalnie - ale to jeszcze z czasow, gdy serwera nie bylo, ale na razie nie bede go usuwac. :)
+                
+                Zabawa na razie na rysowaniu się kończy - ale za to za miesiąc powinnam zarzucić stroną, na której po kazdym rysunku sieć będzie próbowała go odgadnąć, a do nauczenia jej tego uzyte były obrazki was wszystkich!
                 
                 Gotów?
                 `}</p>
@@ -251,7 +259,7 @@ function App() {
           { isGameStarted && <div className="parent timer__content">
             <div/>
             <div className='child inline-block-child'>
-              <h1>{getWord()} ({index + 1}/10)</h1>
+              <h1>{getWord()}/{getWordPolish()} ({index + 1}/10)</h1>
             </div>
             <div/>
             <div className='child inline-block-child'>
@@ -261,14 +269,19 @@ function App() {
           </div> }
           
           <div className='game-container-inner'>
-            <h1>Draw here! Double click to clear the canvas.</h1>
+            <h1>Rysuj tutaj! Kliknij dwukrotnie, by wyczyscic plotno.</h1>
           </div>
           <div className='game-container-inner'>
-            <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
+            <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}
+                onMouseUp={finishDrawing}
+                onTouchEnd={finishDrawing}>
               <canvas id='my-canvas'
                 onMouseDown={startDrawing}
+                onTouchStart={startDrawing}
                 onMouseUp={finishDrawing}
+                onTouchEnd={finishDrawing}
                 onMouseMove={draw}
+                onTouchMove={draw}
                 onDoubleClick={clear}
                 ref={canvasRef}
               />
@@ -276,8 +289,8 @@ function App() {
           </div>
             <div style={ isGameFinished ? {} : { display: 'none' }}>
               <div className='game-container-inner'>
-                <p>{`Time's up!
-                Save this particular artwork and / or continue`}</p>
+                <p>{`Czas się skończył!
+                Kontynuuj (lub jezeli twój obrazek ci się wyjątkowo podoba, mozesz go równiez sobie zapisać. U mnie wyląduje na serwerze w momencie kontynuacji!)`}</p>
               </div>
               <div className='game-container-inner'>
                 <button className='button1' onClick={handleDownload}> Save</button> 
