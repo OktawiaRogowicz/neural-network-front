@@ -179,9 +179,9 @@ function App() {
   function DrawText(props) {
     console.log("draw");
     return (<div>
-      <p>Try and draw</p>
-      <h1>{getWord()}</h1>
-      <p style={{marginBottom: '5vh'}}>in 15 seconds</p>
+      <p>Spróbuj narysować</p>
+      <h1>{getWord()}/{getWordPolish()}</h1>
+      <p style={{marginBottom: '5vh'}}>w 15 sekund</p>
       <PlayButton onClick={ () => { props.on(); setIsGameStarted(true) }}/>
     </div>);
   }
@@ -192,8 +192,8 @@ function App() {
       <p>{`
       To wszystko!
       
-      Zapisane obrazki mozesz przeslac mi na discordzie (Supernova#6608)
-      lub wrzucić do tego dysku Google:`}</p> <a href={url}> klik </a> <p style={{marginBottom: '5vh'}}>{`
+      Obrazki zapisują się automatycznie na stworzonym przeze mnie serwerze.
+      W razie błędów i uwag, skontaktuj się ze mną na Discordzie (Supernova#6608)
 
       Za około miesiąc powinna zaś powstać nowa wersja tego oto frontu - juz w formie zabawy z siecia neuronowa. ;)
 
