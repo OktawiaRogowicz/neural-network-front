@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/neural-network-front/static/css/main.cdb69b92.chunk.css",
+    "main.js": "/neural-network-front/static/js/main.eee8c9f0.chunk.js",
+    "main.js.map": "/neural-network-front/static/js/main.eee8c9f0.chunk.js.map",
+    "runtime-main.js": "/neural-network-front/static/js/runtime-main.f165fb69.js",
+    "runtime-main.js.map": "/neural-network-front/static/js/runtime-main.f165fb69.js.map",
+    "static/css/2.6c0f60ba.chunk.css": "/neural-network-front/static/css/2.6c0f60ba.chunk.css",
+    "static/js/2.ed21b5ca.chunk.js": "/neural-network-front/static/js/2.ed21b5ca.chunk.js",
+    "static/js/2.ed21b5ca.chunk.js.map": "/neural-network-front/static/js/2.ed21b5ca.chunk.js.map",
+    "static/js/3.037359e6.chunk.js": "/neural-network-front/static/js/3.037359e6.chunk.js",
+    "static/js/3.037359e6.chunk.js.map": "/neural-network-front/static/js/3.037359e6.chunk.js.map",
+    "index.html": "/neural-network-front/index.html",
+    "static/css/2.6c0f60ba.chunk.css.map": "/neural-network-front/static/css/2.6c0f60ba.chunk.css.map",
+    "static/css/main.cdb69b92.chunk.css.map": "/neural-network-front/static/css/main.cdb69b92.chunk.css.map",
+    "static/js/2.ed21b5ca.chunk.js.LICENSE.txt": "/neural-network-front/static/js/2.ed21b5ca.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f165fb69.js",
+    "static/css/2.6c0f60ba.chunk.css",
+    "static/js/2.ed21b5ca.chunk.js",
+    "static/css/main.cdb69b92.chunk.css",
+    "static/js/main.eee8c9f0.chunk.js"
+  ]
+}

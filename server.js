@@ -7,14 +7,14 @@ var cors = require('cors');
 // const { application } = require('express');
 // const { default: axios } = require('axios');
 
+app.use(express.static(path.join(__dirname, 'client/build')));
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static('build'));
-    app.get('*', (req, res) => {
-        res.sendFile(path.resolve(__dirname, 'build', 'index.html'));
-    })
+    app.get('*', (req,res) =>{
+        res.sendFile(path.join(__dirname+'/client/build/index.html'));
+    });
 }
 
-//app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'client/public')));
 app.use(express.json({ limit: '200mb'}));
 app.use(express.urlencoded({ limit: '200mb', extended: true}));
 app.use(cors());
