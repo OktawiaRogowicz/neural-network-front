@@ -19,7 +19,10 @@
     "react-dom": "^17.0.2",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.1.2",
-    "webpack": "^4.44.2"
+    "webpack": "^4.44.2",
+    "cloudinary": "^1.21.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0"
   },
   "scripts": {
     "predeploy": "npm run build",
@@ -27,8 +30,7 @@
     "start": "nodemon server",
     "build": "npm run build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "install": "npm install"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
