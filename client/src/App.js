@@ -1,19 +1,30 @@
 import './App.css';
-import { createRef, useEffect, useRef, useState, useContext } from 'react';
-import Timer from "./Timer";
-import PlayButton from "./PlayButton";
+import { createRef, useEffect, useRef, useState, useContext, Suspense } from 'react';
+import Timer from "./components/Timer";
+import Loading from './components/Loading';
+import PlayButton from "./components/PlayButton";
+import Emoji from "./components/Emoji";
 import SlideToggle from "react-slide-toggle";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import FileSaver from 'file-saver';
 import update from 'immutability-helper';
 import JSZip from 'jszip';
 import Axios from 'axios';
+import i18n from './i18n';
+import { useTranslation } from "react-i18next";
+import { t } from 'i18next';
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import LocaleContext from './LocaleContext';
 
 function App() {
-
-  const listOfCategories = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
-  const listOfCategoriesPolish = ['ciasteczko', 'smartfon', 'marchewka', 'brokul', 'lampa stojaca', 'trawa', 'ksiezyc', 'kubek', 'miecz', 'slonce']
+  const { t } = useTranslation();
+  const listOfCategories = [t('cookie'), t('smartphone'), t('carrot'), t('broccoli'), t('floor_lamp'), t('grass'), t('moon'), t('mug'), t('sword'), t('sun')]
   const [index, setIndex] = useState(0)
+
+  const [locale, setLocale] = useState('pl');
+  i18n.on('languageChanged', (lng) => setLocale(i18n.language));
+  const [alignment, setAlignment] = useState('pl');
 
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
@@ -58,8 +69,6 @@ function App() {
   }
 
   const getWord = () => { return listOfCategories[index]}
-
-  const getWordPolish = () => { return listOfCategoriesPolish[index]}
 
   const finishDrawing = () => {
     contextRef.current.closePath()
@@ -165,43 +174,23 @@ function App() {
     canvas.style.border = style;
   }
 
-  const Emoji = props => (
-    <span
-      className="emoji"
-      role="img"
-      aria-label={props.label ? props.label : ""}
-      aria-hidden={props.label ? "false" : "true"}
-    >
-      {props.symbol}
-    </span>
-  )
-
   function DrawText(props) {
     console.log("draw");
     return (<div>
-      <p>Spróbuj narysować</p>
-      <h1>{getWord()}/{getWordPolish()}</h1>
-      <p style={{marginBottom: '5vh'}}>w 15 sekund</p>
+      <p>{t('try1_try')}</p>
+      <h1>{getWord()}</h1>
+      <p style={{marginBottom: '5vh'}}>{t('try2_15s')}</p>
       <PlayButton onClick={ () => { props.on(); setIsGameStarted(true) }}/>
     </div>);
   }
   
   function FinishedText(props) {
-    let url = "https://drive.google.com/drive/folders/1EDM_9kNhp_OL_SH8GiF8XVE2j_hH2Qjm?usp=sharing";
     return (<div>
-      <p>{`
-      To wszystko!
-      
-      Obrazki zapisują się automatycznie na stworzonym przeze mnie serwerze.
-      W razie błędów i uwag, skontaktuj się ze mną na Discordzie (Supernova#6608)
-
-      Za około miesiąc powinna zaś powstać nowa wersja tego oto frontu - juz w formie zabawy z siecia neuronowa. ;)
-
-      `}</p>
-      <p><b>{`Dziękuję za pomoc! `}</b><Emoji symbol="💛"/></p> 
-      <p style={{marginBottom: '5vh'}}>{`Jezeli chcesz zagrac ponownie - kliknij przycisk. Zeby pobrac zipa/paczke swoich plikow, kliknij Save.`}</p>
+      <p>{t('thats_all')}</p>
+      <p><b>{t('thanks_for_help')}</b><Emoji symbol="💛"/></p> 
+      <p style={{marginBottom: '5vh'}}>{t('play_again')}</p>
       <div className='game-container-inner'>
-      <button className='button2' onClick={handleZipDownload}> Save</button> 
+      <button className='button2' onClick={handleZipDownload}>{t('save')}</button> 
       </div>
       <div className='game-container-inner'>
       <PlayButton onClick={ () => window.location.reload(true) }/>
@@ -217,92 +206,114 @@ function App() {
     return <FinishedText />;
   }
 
+  function changeLocale (l) {
+    i18n.changeLanguage(l);
+  }
+
+  const handleAlignment = (event, newAlignment) => {
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+      changeLocale(newAlignment);
+    }
+  };
+
+  const useStyles = makeStyles({
+    root: {
+      background: 'linear-gradient(45deg, #FFD700 30%, #FFD700 90%)',
+      border: 0,
+      borderRadius: 3,
+      boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+      color: 'white',
+      marginBottom: 30
+    },
+  });
+
+  const classes = useStyles();
+
   return (
     <main>
-      
-      <SlideToggle duration={800} collapsed
-      render={({ onToggle, setCollapsibleElement, progress }) => (
-        <div>
-          <div className="my-collapsible">
-            <div className="my-collapsible__content" ref={setCollapsibleElement}>
-              <div className="my-collapsible__content-inner"
-              style={{
-                transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
-              }}
-              >
-                <CollapsibleText isFinished={isFinished} on={() => onToggle()}/>
+      <LocaleContext.Provider value={{locale, setLocale}}>
+        <Suspense fallback={<Loading />}>
+          <SlideToggle duration={800} collapsed
+          render={({ onToggle, setCollapsibleElement, progress }) => (
+            <div>
+              <div className="my-collapsible">
+                <div className="my-collapsible__content" ref={setCollapsibleElement}>
+                  <div className="my-collapsible__content-inner"
+                  style={{
+                    transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
+                  }}
+                  >
+                    <CollapsibleText isFinished={isFinished} on={() => onToggle()}/>
+                  </div>
+                </div>
+                <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
+                    <div className="welcome">
+                      <ToggleButtonGroup
+                        className={classes.root}
+                        value={alignment}
+                        exclusive
+                        onChange={handleAlignment}
+                      >
+                        <ToggleButton value="pl">Polski</ToggleButton>
+                        <ToggleButton value="en">English</ToggleButton>
+                      </ToggleButtonGroup>
+                      <p><b>{t('hi')}</b><Emoji symbol="👋"/></p> 
+                      <p style={{marginBottom: '5vh'}}>{t('welcome')}</p>
+                      <PlayButton onClick={ () => { onToggle(); hideStart(); startRound()}}/>
+                    </div>
+                </div>
               </div>
-            </div>
-            <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
+
+            <div className='game-container' style={ isGameStarted ? {} : {display: 'none'}}>
+              { isGameStarted && <div className="parent timer__content">
+                <div/>
+                <div className='child inline-block-child'>
+                  <h1>{getWord()} ({index + 1}/10)</h1>
+                </div>
+                <div/>
+                <div className='child inline-block-child'>
+                  <Timer stop={stopTimer} ref={timerRef}/>
+                </div>
+                <div/>
+              </div> }
               
-              <div className="welcome">
-              <p><b>{`Hej! `}</b><Emoji symbol="👋"/></p> 
-              <p style={{marginBottom: '5vh'}}>{`
-                Skoro tutaj jesteś, zdecydował*ś się pomóc mi w pracy inzynierskiej. Dziękuję! :)
-
-                Celem mojej pracy jest odtworzenie gry Quick, Draw!, którą stworzyło Google. Będę tworzyć sieć neurnonową, czyli AI, które spróbuje rozpoznać, czy narysowano obrazek zgodny z wylosowanym tematem. Ale bazę danych zbieram sama - i dlatego właśnie potrzebuję pomocy!
-
-                Ta strona jest stworzona właśnie po to - twoim zadaniem będzie dziesięć razy w przeciągu 15 sekund narysować otrzymane hasło!
-                
-                Narysowane rysunki AUTOMATYCZNIE lądują na stworzonym przeze mnie serwerze i bazie danych w momencie, w którym klikasz przycisk DALEJ. SAVE istnieje, by zapisac go lokalnie - ale to jeszcze z czasow, gdy serwera nie bylo, ale na razie nie bede go usuwac. :)
-                
-                Zabawa na razie na rysowaniu się kończy - ale za to za miesiąc powinnam zarzucić stroną, na której po kazdym rysunku sieć będzie próbowała go odgadnąć, a do nauczenia jej tego uzyte były obrazki was wszystkich!
-                
-                Gotów?
-                `}</p>
-                <PlayButton onClick={ () => { onToggle(); hideStart(); startRound()}}/>
-              </div>
-            </div>
-          </div>
-
-        <div className='game-container' style={ isGameStarted ? {} : {display: 'none'}}>
-          { isGameStarted && <div className="parent timer__content">
-            <div/>
-            <div className='child inline-block-child'>
-              <h1>{getWord()}/{getWordPolish()} ({index + 1}/10)</h1>
-            </div>
-            <div/>
-            <div className='child inline-block-child'>
-              <Timer stop={stopTimer} ref={timerRef}/>
-            </div>
-            <div/>
-          </div> }
-          
-          <div className='game-container-inner'>
-            <h1>Rysuj tutaj! Kliknij dwukrotnie, by wyczyscic plotno.</h1>
-          </div>
-          <div className='game-container-inner'>
-            <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}
-                onMouseUp={finishDrawing}
-                onTouchEnd={finishDrawing}>
-              <canvas id='my-canvas'
-                onMouseDown={startDrawing}
-                onTouchStart={startDrawing}
-                onMouseUp={finishDrawing}
-                onTouchEnd={finishDrawing}
-                onMouseMove={draw}
-                onTouchMove={draw}
-                onDoubleClick={clear}
-                ref={canvasRef}
-              />
-            </div>
-          </div>
-            <div style={ isGameFinished ? {} : { display: 'none' }}>
               <div className='game-container-inner'>
-                <p>{`Czas się skończył!
-                Kontynuuj (lub jezeli twój obrazek ci się wyjątkowo podoba, mozesz go równiez sobie zapisać. U mnie wyląduje na serwerze w momencie kontynuacji!)`}</p>
+                <h1>{t('draw_here')}</h1>
               </div>
               <div className='game-container-inner'>
-                <button className='button1' onClick={handleDownload}> Save</button> 
+                <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}
+                    onMouseUp={finishDrawing}
+                    onTouchEnd={finishDrawing}>
+                  <canvas id='my-canvas'
+                    onMouseDown={startDrawing}
+                    onTouchStart={startDrawing}
+                    onMouseUp={finishDrawing}
+                    onTouchEnd={finishDrawing}
+                    onMouseMove={draw}
+                    onTouchMove={draw}
+                    onDoubleClick={clear}
+                    ref={canvasRef}
+                  />
+                </div>
               </div>
-              <div className='game-container-inner'>
-                <PlayButton style={{color: 'gold', width: 60, height: 60}} onClick={ () => { onToggle(); startRound() }}/>
-              </div>
+                <div style={ isGameFinished ? {} : { display: 'none' }}>
+                  <div className='game-container-inner'>
+                    <p>{t('times_up')}</p>
+                  </div>
+                  <div className='game-container-inner'>
+                    <button className='button1' onClick={handleDownload}> Save</button> 
+                  </div>
+                  <div className='game-container-inner'>
+                    <PlayButton style={{color: 'gold', width: 60, height: 60}} onClick={ () => { onToggle(); startRound() }}/>
+                  </div>
+                </div>
             </div>
-        </div>
 
-      </div>
-      )}/>
+          </div>
+          )}/>
+      </Suspense>
+    </LocaleContext.Provider>
     </main>
   );
 }

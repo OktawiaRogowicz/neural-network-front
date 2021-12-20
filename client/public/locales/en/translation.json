@@ -1,0 +1,34 @@
+{
+    "cookie": "cookie",
+    "smartphone": "smartphone",
+    "carrot": "carrot",
+    "broccoli": "broccoli",
+    "floor_lamp": "floor_lamp",
+    "grass": "grass",
+    "moon": "moon",
+    "mug": "mug",
+    "sword": "sword",
+    "sun": "sun",
+
+    "loading": "Loading...",
+
+    "try1_try": "Try to draw",
+    "try2_15s": "in 15 seconds",
+    
+    "thats_all": "That's all!\n\nPictures are automatically sent to a server created by me.\nIn case of bugs or suggestions, contact me on Discord (Supernova#6608)\n\nIn a month there should be a new version of this front - this time in a form of an actual game with neural network! ;)",
+    
+    "thanks_for_help": "Thanks for your help!",
+    
+    "play_again": "If you want to play again - click the button. To download a zip of your files, click Save.",
+    
+    "save": "Save",
+    
+    "hi": "Hi!",
+    
+    "welcome": "If you're here, that means you decided to help me with my Engineering Thesis. Thank you! :)\n\nThe aim of my BSc Thesis is to recreate game Quick, Draw! that Google has created. I will be creating a neural network, AI, that will try to guess if the drawn picture is correct with a given drawing prompt. But I collect the dataset myself - and that's exactly why I need help!\n\nThis website is created exactly because of that - your job is to draw the given word in 15 seconds ten times!\n\nDrawn pictures are AUTOMATICALLY sent to a server and database created by me in the moment you click CONTINUE button. SAVE exists, to save it locally - but that's back from the time that server has not existed yet, and I won't delete it for now. :)\n\nThat's all for now - but in a month I should link you a website on a which after each picture drawn, neural network taught on drawings drawn by all of you will try to guess them!\n\nReady?",
+    
+    "draw_here": "Draw here! Double click to clear the canvas.",
+    
+    "times_up": "Time's up!\nContinue (or if you like your drawing very much, you can also save it. For me, it is sent to the server in the moment you continue!)"
+    
+    }
