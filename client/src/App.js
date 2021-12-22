@@ -19,7 +19,7 @@ import LocaleContext from './LocaleContext';
 
 function App() {
   const { t } = useTranslation();
-  const listOfCategoriesEn = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor_lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
+  const listOfCategoriesEn = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
   const listOfCategories = [t('cookie'), t('smartphone'), t('carrot'), t('broccoli'), t('floor_lamp'), t('grass'), t('moon'), t('mug'), t('sword'), t('sun')]
   const [index, setIndex] = useState(0)
 
@@ -103,7 +103,7 @@ function App() {
         var file = new File([blob], getWordEn() + ".png");
         setData(oldData => [...oldData, file] )
         uploadImage(file, getWordEn());
-        console.log(getwordEn);
+        console.log(getwordEn());
         //const zip = zipRef.current;
         //zip.file(getWord() + ".png", blob, {base64: true}); 
       });
