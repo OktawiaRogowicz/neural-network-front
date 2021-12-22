@@ -3,19 +3,15 @@ import { createRef, useEffect, useRef, useState, useContext, Suspense } from 're
 import Timer from "./components/Timer";
 import Loading from './components/Loading';
 import PlayButton from "./components/PlayButton";
-import Emoji from "./components/Emoji";
 import SlideToggle from "react-slide-toggle";
-import { CircularProgressbar } from 'react-circular-progressbar';
 import FileSaver from 'file-saver';
-import update from 'immutability-helper';
 import JSZip from 'jszip';
-import Axios from 'axios';
 import i18n from './i18n';
 import { useTranslation } from "react-i18next";
 import { t } from 'i18next';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import LocaleContext from './LocaleContext';
+import Welcome from './components/Welcome';
+import CollapsibleText from './components/CollapsibleText';
 
 function App() {
   const { t } = useTranslation();
@@ -25,7 +21,6 @@ function App() {
 
   const [locale, setLocale] = useState('pl');
   i18n.on('languageChanged', (lng) => setLocale(i18n.language));
-  const [alignment, setAlignment] = useState('pl');
 
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
@@ -177,62 +172,6 @@ function App() {
     canvas.style.border = style;
   }
 
-  function DrawText(props) {
-    console.log("draw");
-    return (<div>
-      <p>{t('try1_try')}</p>
-      <h1>{getWord()}</h1>
-      <p style={{marginBottom: '5vh'}}>{t('try2_15s')}</p>
-      <PlayButton onClick={ () => { props.on(); setIsGameStarted(true) }}/>
-    </div>);
-  }
-  
-  function FinishedText(props) {
-    return (<div>
-      <p>{t('thats_all')}</p>
-      <p><b>{t('thanks_for_help')}</b><Emoji symbol="💛"/></p> 
-      <p style={{marginBottom: '5vh'}}>{t('play_again')}</p>
-      <div className='game-container-inner'>
-      <button className='button2' onClick={handleZipDownload}>{t('save')}</button> 
-      </div>
-      <div className='game-container-inner'>
-      <PlayButton onClick={ () => window.location.reload(true) }/>
-      </div>
-    </div>);
-  }
-
-  function CollapsibleText(props) {
-    const isFinished = props.isFinished;
-    if (!isFinished) {
-      return <DrawText on={() => props.on()}/>
-    }
-    return <FinishedText />;
-  }
-
-  function changeLocale (l) {
-    i18n.changeLanguage(l);
-  }
-
-  const handleAlignment = (event, newAlignment) => {
-    if (newAlignment !== null) {
-      setAlignment(newAlignment);
-      changeLocale(newAlignment);
-    }
-  };
-
-  const useStyles = makeStyles({
-    root: {
-      background: 'linear-gradient(45deg, #FFD700 30%, #FFD700 90%)',
-      border: 0,
-      borderRadius: 3,
-      boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-      color: 'white',
-      marginBottom: 30
-    },
-  });
-
-  const classes = useStyles();
-
   return (
     <main>
       <LocaleContext.Provider value={{locale, setLocale}}>
@@ -247,24 +186,12 @@ function App() {
                     transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
                   }}
                   >
-                    <CollapsibleText isFinished={isFinished} on={() => onToggle()}/>
+                    <CollapsibleText isFinished={isFinished} setIsGameStarted={setIsGameStarted} 
+                                     getWord={getWord} handleZipDownload={handleZipDownload} on={() => onToggle()}/>
                   </div>
                 </div>
                 <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
-                    <div className="welcome">
-                      <ToggleButtonGroup
-                        className={classes.root}
-                        value={alignment}
-                        exclusive
-                        onChange={handleAlignment}
-                      >
-                        <ToggleButton value="pl">Polski</ToggleButton>
-                        <ToggleButton value="en">English</ToggleButton>
-                      </ToggleButtonGroup>
-                      <p><b>{t('hi')}</b><Emoji symbol="👋"/></p> 
-                      <p style={{marginBottom: '5vh'}}>{t('welcome')}</p>
-                      <PlayButton onClick={ () => { onToggle(); hideStart(); startRound()}}/>
-                    </div>
+                    <Welcome onToggle={onToggle} hideStart={hideStart} startRound={startRound} />
                 </div>
               </div>
 
