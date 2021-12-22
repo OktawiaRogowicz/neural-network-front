@@ -102,7 +102,7 @@ function App() {
       canvas.toBlob(function(blob) {
         var file = new File([blob], getWordEn() + ".png");
         setData(oldData => [...oldData, file] )
-        uploadImage(file, getWord());
+        uploadImage(file, getWordEn());
         //const zip = zipRef.current;
         //zip.file(getWord() + ".png", blob, {base64: true}); 
       });
