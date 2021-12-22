@@ -19,6 +19,7 @@ import LocaleContext from './LocaleContext';
 
 function App() {
   const { t } = useTranslation();
+  const listOfCategoriesEn = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor_lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
   const listOfCategories = [t('cookie'), t('smartphone'), t('carrot'), t('broccoli'), t('floor_lamp'), t('grass'), t('moon'), t('mug'), t('sword'), t('sun')]
   const [index, setIndex] = useState(0)
 
@@ -69,6 +70,7 @@ function App() {
   }
 
   const getWord = () => { return listOfCategories[index]}
+  const getWordEn = () => { return listOfCategoriesEn[index]}
 
   const finishDrawing = () => {
     contextRef.current.closePath()
@@ -98,7 +100,7 @@ function App() {
       var canvas = document.getElementById("my-canvas");
     
       canvas.toBlob(function(blob) {
-        var file = new File([blob], getWord() + ".png");
+        var file = new File([blob], getWordEn() + ".png");
         setData(oldData => [...oldData, file] )
         uploadImage(file, getWord());
         //const zip = zipRef.current;
