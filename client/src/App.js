@@ -103,6 +103,7 @@ function App() {
         var file = new File([blob], getWordEn() + ".png");
         setData(oldData => [...oldData, file] )
         uploadImage(file, getWordEn());
+        console.log(getwordEn);
         //const zip = zipRef.current;
         //zip.file(getWord() + ".png", blob, {base64: true}); 
       });
