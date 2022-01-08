@@ -16,6 +16,8 @@ import { t } from 'i18next';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import LocaleContext from './LocaleContext';
+import * as tf from "@tensorflow/tfjs"; 
+
 
 function App() {
   const { t } = useTranslation();
@@ -123,7 +125,37 @@ function App() {
 
   }
 
+  const predictNodeJS = async (base64EncodedImage) => {
+    try {
+      await fetch('/api/predict', {
+        method: 'POST',
+        body: JSON.stringify({data: base64EncodedImage}),
+        headers: { 'Content-Type': 'application/json'},
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const recognise = () => {
+    const context = contextRef.current;
+    var imageData = context.getImageData(0, 0, 400, 400);
+    console.log(imageData);
+    var tfImage = tf.browser.fromPixels(imageData, 1);
+    console.log(tfImage);
+    var tfResizedImage = tf.image.resizeBilinear(tfImage, [100,100]);
+    console.log(tfResizedImage);
+    tfResizedImage = tfResizedImage.reshape([1, 100, 100, 1]);
+    console.log(tfResizedImage);
+    tfResizedImage = tf.cast(tfResizedImage, 'float32');
+    console.log(tfResizedImage);
+
+    console.log(tfResizedImage.dataSync());
+    predictNodeJS(tfResizedImage);
+  }
+
   const stopTimer = () => {
+    recognise();
     setIsGameFinished(true)
     changeCanvasBorder('3px solid lightgray');
   } 
@@ -295,7 +327,7 @@ function App() {
                     onTouchEnd={finishDrawing}
                     onMouseMove={draw}
                     onTouchMove={draw}
-                    onDoubleClick={clear}
+                    //onDoubleClick={clear}
                     ref={canvasRef}
                   />
                 </div>
