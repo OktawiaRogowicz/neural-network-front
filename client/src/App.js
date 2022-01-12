@@ -24,7 +24,19 @@ function App() {
   const listOfCategoriesEn = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
   const listOfCategories = [t('cookie'), t('smartphone'), t('carrot'), t('broccoli'), t('floor_lamp'), t('grass'), t('moon'), t('mug'), t('sword'), t('sun')]
   const [index, setIndex] = useState(0)
-  const [response, setResponse] = useState([]);
+  const [response, setResponse] = useState({results: 
+    {
+      "0": "loading...",
+      "1": "loading...",
+      "2": "loading...",
+      "3": "loading...",
+      "4": "loading...",
+      "5": "loading...",
+      "6": "loading...",
+      "7": "loading...",
+      "8": "loading...",
+      "9": "loading..."
+  }});
 
   const [locale, setLocale] = useState('pl');
   i18n.on('languageChanged', (lng) => setLocale(i18n.language));
@@ -95,6 +107,20 @@ function App() {
 
   const startRound = () => {
     if(isGameFinished) {
+        setResponse({results: 
+          {
+            "0": "calculating...",
+            "1": "calculating...",
+            "2": "calculating...",
+            "3": "calculating...",
+            "4": "calculating...",
+            "5": "calculating...",
+            "6": "calculating...",
+            "7": "calculating...",
+            "8": "calculating...",
+            "9": "calculating..."
+        }});
+
       recognise();
       var canvas = document.getElementById("my-canvas");
     
@@ -102,7 +128,7 @@ function App() {
         var file = new File([blob], getWordEn() + ".png");
         setData(oldData => [...oldData, file] )
         uploadImage(file, getWordEn());
-        console.log(getWordEn());
+
         //const zip = zipRef.current;
         //zip.file(getWord() + ".png", blob, {base64: true}); 
       });
@@ -131,6 +157,7 @@ function App() {
     })
     .then(data => {
         console.log("DATA FROM PREDICT", data);
+        setResponse(data);
         return data;
     })
     .catch(error => {
@@ -165,7 +192,7 @@ function preprocess()
     console.log(batched);
     console.log(batched.dataSync());
     const dataArray = batched.arraySync();
-    predictNodeJS(dataArray).then(res => setResponse(res));
+    const res = await predictNodeJS(dataArray);
   }
 
   const stopTimer = () => {
@@ -225,10 +252,12 @@ function preprocess()
   function DrawText(props) {
 
     const results = [];
-    console.log("response: ", response);
-    if(index != 0) {
+    // console.log("response: ", response);
+    // console.log("fff", response[0].results[0]);
+    //console.log("len", response.results[0]);
+    if(index != 0 && response != undefined) {
       for (let i = 0; i < 10; i++) {
-        results.push(<p key={i}>{listOfCategories[i]}: {response[i]}</p>);
+        results.push(<p key={i}>{listOfCategories[i]}: {response.results[i]}</p>);
       }
     }
 
