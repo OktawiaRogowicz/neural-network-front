@@ -13,7 +13,6 @@ function Timer(props) {
 
   const secondsLeftRef = useRef(secondsLeft);
   const isPausedRef = useRef(isPaused);
-  const modeRef = useRef(mode);
 
   const workMinutes = 0.25;
 
@@ -28,15 +27,12 @@ function Timer(props) {
     setSecondsLeft(secondsLeftRef.current);
 
     const interval = setInterval(() => {
-      if (isPausedRef.current) {
-        return;
-      }
       if (secondsLeftRef.current === 0) {
         return props.stop();
       }
-
       tick();
     },1000);
+      console.log("HIR")
 
     return () => clearInterval(interval);
   }, []);

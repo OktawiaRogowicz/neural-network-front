@@ -24,6 +24,7 @@ function App() {
   const listOfCategoriesEn = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
   const listOfCategories = [t('cookie'), t('smartphone'), t('carrot'), t('broccoli'), t('floor_lamp'), t('grass'), t('moon'), t('mug'), t('sword'), t('sun')]
   const [index, setIndex] = useState(0)
+  const [response, setResponse] = useState([]);
 
   const [locale, setLocale] = useState('pl');
   i18n.on('languageChanged', (lng) => setLocale(i18n.language));
@@ -31,7 +32,6 @@ function App() {
 
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
-  const timerRef = createRef()
 
   const [isDrawing, setIsDrawing] = useState(false)
   const [isGameStarted, setIsGameStarted] = useState(false)
@@ -41,7 +41,6 @@ function App() {
   const [isFinished, setIsFinished] = useState(false)
 
   const [data, setData] = useState([]);
-  const zipRef = useRef(null)
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -59,9 +58,6 @@ function App() {
     context.strokeStyle = "black"
     context.lineWidth = 10
     contextRef.current = context;
-
-    var zip = new JSZip();
-    zipRef.current = zip;
   }, [])
 
   const startDrawing = ({nativeEvent}) => {
@@ -99,6 +95,7 @@ function App() {
 
   const startRound = () => {
     if(isGameFinished) {
+      recognise();
       var canvas = document.getElementById("my-canvas");
     
       canvas.toBlob(function(blob) {
@@ -109,8 +106,6 @@ function App() {
         //const zip = zipRef.current;
         //zip.file(getWord() + ".png", blob, {base64: true}); 
       });
-      console.log(data);
-
       var i = index;
       setIndex(i + 1)
     }
@@ -126,36 +121,54 @@ function App() {
   }
 
   const predictNodeJS = async (base64EncodedImage) => {
-    try {
-      await fetch('/api/predict', {
-        method: 'POST',
-        body: JSON.stringify({data: base64EncodedImage}),
-        headers: { 'Content-Type': 'application/json'},
-      });
-    } catch (error) {
-      console.log(error);
-    }
+    await fetch('/api/predict', {
+      method: 'POST',
+      body: JSON.stringify({data: base64EncodedImage}),
+      headers: { 'Content-Type': 'application/json'},
+    })
+    .then(response => {
+        return response.json();
+    })
+    .then(data => {
+        console.log("DATA FROM PREDICT", data);
+        return data;
+    })
+    .catch(error => {
+        return error;
+    });
   }
 
-  const recognise = () => {
-    const context = contextRef.current;
-    var imageData = context.getImageData(0, 0, 400, 400);
-    console.log(imageData);
-    var tfImage = tf.browser.fromPixels(imageData, 1);
-    console.log(tfImage);
-    var tfResizedImage = tf.image.resizeBilinear(tfImage, [100,100]);
-    console.log(tfResizedImage);
-    tfResizedImage = tfResizedImage.reshape([1, 100, 100, 1]);
-    console.log(tfResizedImage);
-    tfResizedImage = tf.cast(tfResizedImage, 'float32');
-    console.log(tfResizedImage);
+function preprocess()
+{
+  const context = contextRef.current;
+  var imageData = context.getImageData(0, 0, 400, 400);
+  let tensor = tf.browser.fromPixels(imageData, 4);
+  const resized = tf.image.resizeBilinear(tensor, [100, 100]).toFloat();
+  const offset = tf.scalar(255.0);
+  const normalized = resized.div(offset);
+  var arrOld = normalized.dataSync();
+  console.log("arrOld: ", arrOld);
+  var arr = [];
+  for (var i = 3; i < arrOld.length; i=i+4) {
+    arr.push(1.0 - arrOld[i]);
+  }
+  console.log(arr);
+  var newTensor = tf.tensor(arr);
+  var batched = tf.reshape(newTensor, [1, 100, 100, 1]);
+  console.log(batched);
+  return batched;
+}
 
-    console.log(tfResizedImage.dataSync());
-    predictNodeJS(tfResizedImage);
+  const recognise = async () => {
+    console.log("halko recognise srodek");
+    var batched = preprocess();
+    console.log(batched);
+    console.log(batched.dataSync());
+    const dataArray = batched.arraySync();
+    predictNodeJS(dataArray).then(res => setResponse(res));
   }
 
   const stopTimer = () => {
-    recognise();
     setIsGameFinished(true)
     changeCanvasBorder('3px solid lightgray');
   } 
@@ -190,9 +203,7 @@ function App() {
   }
 
   const upload = async (base64EncodedImage, categoryname) => {
-    console.log(base64EncodedImage);
     var cn = "neural_" + categoryname;
-    console.log(cn);
     try {
       await fetch('/api/upload', {
         method: 'POST',
@@ -202,6 +213,8 @@ function App() {
     } catch (error) {
       console.log(error);
     }
+
+
   }
 
   const changeCanvasBorder = (style) => {
@@ -210,8 +223,16 @@ function App() {
   }
 
   function DrawText(props) {
-    console.log("draw");
-    return (<div>
+
+    const results = [];
+    console.log("response: ", response);
+    if(index != 0) {
+      for (let i = 0; i < 10; i++) {
+        results.push(<p key={i}>{listOfCategories[i]}: {response[i]}</p>);
+      }
+    }
+
+    return (<div>{results}
       <p>{t('try1_try')}</p>
       <h1>{getWord()}</h1>
       <p style={{marginBottom: '5vh'}}>{t('try2_15s')}</p>
@@ -308,7 +329,7 @@ function App() {
                 </div>
                 <div/>
                 <div className='child inline-block-child'>
-                  <Timer stop={stopTimer} ref={timerRef}/>
+                  <Timer stop={stopTimer}/>
                 </div>
                 <div/>
               </div> }
