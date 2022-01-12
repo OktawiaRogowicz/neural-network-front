@@ -22,7 +22,7 @@ app.use(cors());
 
 app.post('/api/predict', async (req, res) => {
     try {
-        var result = predictSample(req.body.data);
+        var result = await predictSample(req.body.data);
         console.log("???");
         console.log(result);
 
@@ -38,9 +38,9 @@ app.post('/api/predict', async (req, res) => {
         // 0.00020167436741758138,
         // 0.002903217915445566];
 
-        res.json({results: JSON.stringify(result)});
+        res.json({results: result});
         console.log("cokolwiek");
-        
+
     } catch (error) {
 
     }
