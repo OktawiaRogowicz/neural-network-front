@@ -17,6 +17,7 @@ import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import LocaleContext from './LocaleContext';
 import * as tf from "@tensorflow/tfjs"; 
+import { margin } from '@mui/system';
 
 
 function App() {
@@ -250,18 +251,7 @@ function preprocess()
   }
 
   function DrawText(props) {
-
-    const results = [];
-    // console.log("response: ", response);
-    // console.log("fff", response[0].results[0]);
-    //console.log("len", response.results[0]);
-    if(index != 0 && response != undefined) {
-      for (let i = 0; i < 10; i++) {
-        results.push(<p key={i}>{listOfCategories[i]}: {response.results[i]}</p>);
-      }
-    }
-
-    return (<div>{results}
+    return (<div>
       <p>{t('try1_try')}</p>
       <h1>{getWord()}</h1>
       <p style={{marginBottom: '5vh'}}>{t('try2_15s')}</p>
@@ -283,12 +273,46 @@ function preprocess()
     </div>);
   }
 
+  function ResultsText() {
+    const results = [];
+    if(index != 0 && response != undefined) {
+      for (let i = 0; i < 10; i++) {
+        results.push(<p key={i}> <b>{listOfCategories[i]}:</b> {response.results[i]}</p>);
+      }
+    }
+
+    return(<div>{results}</div>);
+  }
+
   function CollapsibleText(props) {
     const isFinished = props.isFinished;
+    const [showResults, setShowResults] = useState(true)
+    const [showText, setShowText] = useState(false)
+
+    const onClick = () => {setShowResults(false); setShowText(true)}
+
     if (!isFinished) {
-      return <DrawText on={() => props.on()}/>
+      if (index == 0 )
+        return <DrawText on={() => props.on()}/>
+      return (<div>
+        { showResults ?
+          <div>
+            <ResultsText/>
+            <PlayButton style={{marginTop: '5vh'}} onClick={onClick}/>
+          </div>
+        : null }
+        { showText ? <DrawText on={() => props.on()}/> : null }
+      </div>)
     }
-    return <FinishedText />;
+    return (<div>
+      { showResults ?
+        <div>
+          <ResultsText/>
+          <PlayButton onClick={onClick}/>
+        </div>
+      : null }
+      { showText ? <FinishedText /> : null }
+    </div>);
   }
 
   function changeLocale (l) {
@@ -327,8 +351,7 @@ function preprocess()
                   <div className="my-collapsible__content-inner"
                   style={{
                     transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
-                  }}
-                  >
+                  }}>
                     <CollapsibleText isFinished={isFinished} on={() => onToggle()}/>
                   </div>
                 </div>
