@@ -157,7 +157,6 @@ function App() {
         return response.json();
     })
     .then(data => {
-        console.log("DATA FROM PREDICT", data);
         setResponse(data);
         return data;
     })
@@ -175,23 +174,17 @@ function preprocess()
   const offset = tf.scalar(255.0);
   const normalized = resized.div(offset);
   var arrOld = normalized.dataSync();
-  console.log("arrOld: ", arrOld);
   var arr = [];
   for (var i = 3; i < arrOld.length; i=i+4) {
     arr.push(1.0 - arrOld[i]);
   }
-  console.log(arr);
   var newTensor = tf.tensor(arr);
   var batched = tf.reshape(newTensor, [1, 100, 100, 1]);
-  console.log(batched);
   return batched;
 }
 
   const recognise = async () => {
-    console.log("halko recognise srodek");
     var batched = preprocess();
-    console.log(batched);
-    console.log(batched.dataSync());
     const dataArray = batched.arraySync();
     const res = await predictNodeJS(dataArray);
   }
@@ -206,7 +199,6 @@ function preprocess()
     
     canvas.toBlob(function(blob) {
       FileSaver.saveAs(blob, getWord() + ".png");
-      console.log(data);
     });
   }
 
@@ -241,8 +233,6 @@ function preprocess()
     } catch (error) {
       console.log(error);
     }
-
-
   }
 
   const changeCanvasBorder = (style) => {

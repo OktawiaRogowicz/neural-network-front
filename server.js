@@ -23,24 +23,7 @@ app.use(cors());
 app.post('/api/predict', async (req, res) => {
     try {
         var result = await predictSample(req.body.data);
-        console.log("???");
-        console.log(result);
-
-
-        // var arr = [0.9283097386360168,
-        // 3.825167294024823e-9,
-        // 0.000002357488256166107,
-        // 0.06025977432727814,
-        // 6.390929740973661e-8,
-        // 0.008318196050822735,
-        // 8.327210448966227e-11,
-        // 0.000004928299404127756,
-        // 0.00020167436741758138,
-        // 0.002903217915445566];
-
         res.json({results: result});
-        console.log("cokolwiek");
-
     } catch (error) {
 
     }
@@ -54,10 +37,8 @@ app.post('/api/upload', async (req, res) => {
         upload(fileStr, {
             upload_preset: name,
         })
-        console.log(uploadedResponse);
         res.json({msg: "YAAY"})
     } catch (error) {
-        console.error(error)
         res.status(500).json({err: 'Something went wrong'})
     }
 })
@@ -74,6 +55,5 @@ async function predictSample(sample) {
     const t2 = tf.tensor(sample);
     const t = tf.tensor(sample, [1, 100, 100, 1]);
     let result = await model.predict(t).data();
-    console.log(result);
     return result;
   }
