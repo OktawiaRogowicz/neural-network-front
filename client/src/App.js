@@ -110,16 +110,16 @@ function App() {
     if(isGameFinished) {
         setResponse({results: 
           {
-            "0": "calculating...",
-            "1": "calculating...",
-            "2": "calculating...",
-            "3": "calculating...",
-            "4": "calculating...",
-            "5": "calculating...",
-            "6": "calculating...",
-            "7": "calculating...",
-            "8": "calculating...",
-            "9": "calculating..."
+            "0": "calculating ",
+            "1": "calculating ",
+            "2": "calculating ",
+            "3": "calculating ",
+            "4": "calculating ",
+            "5": "calculating ",
+            "6": "calculating ",
+            "7": "calculating ",
+            "8": "calculating ",
+            "9": "calculating "
         }});
 
       recognise();
@@ -267,7 +267,10 @@ function preprocess()
     const results = [];
     if(index != 0 && response != undefined) {
       for (let i = 0; i < 10; i++) {
-        results.push(<p key={i}> <b>{listOfCategories[i]}:</b> {response.results[i]}</p>);
+        var parsed = parseFloat(response.results[i]);
+        results.push(
+          <p key={i}> <b>{listOfCategories[i]}:</b> {isNaN(parsed) ? response.results[i] : parsed.toFixed(2) * 100.0}%</p>
+        );
       }
     }
 
