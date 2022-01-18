@@ -27,7 +27,7 @@
 
     "welcome": "Skoro tutaj jesteś, zdecydował*ś się pomóc mi w pracy inzynierskiej. Dziękuję! :)\n\nCelem mojej pracy jest odtworzenie gry Quick, Draw!, którą stworzyło Google. Będę tworzyć sieć neurnonową, czyli AI, które spróbuje rozpoznać, czy narysowano obrazek zgodny z wylosowanym tematem. Ale bazę danych zbieram sama - i dlatego właśnie potrzebuję pomocy!\n\nTa strona jest stworzona właśnie po to - twoim zadaniem będzie dziesięć razy w przeciągu 15 sekund narysować otrzymane hasło!\n\nNarysowane rysunki AUTOMATYCZNIE lądują na stworzonym przeze mnie serwerze i bazie danych w momencie, w którym klikasz przycisk DALEJ. ZAPISZ istnieje, by zapisac go lokalnie - ale to jeszcze z czasow, gdy serwera nie bylo, ale na razie nie bede go usuwac. :)\n\nZabawa na razie na rysowaniu się kończy - ale za to za miesiąc powinnam zarzucić stroną, na której po kazdym rysunku sieć będzie próbowała go odgadnąć, a do nauczenia jej tego uzyte były obrazki was wszystkich!\n\nGotów?",
 
-    "draw_here": "Rysuj tutaj! Kliknij dwukrotnie, by wyczyscic plotno.",
+    "draw_here": "Rysuj tutaj!",
 
     "times_up": "Czas się skończył!\nKontynuuj (lub jezeli twój obrazek ci się wyjątkowo podoba, mozesz go równiez sobie zapisać. U mnie wyląduje na serwerze w momencie kontynuacji!)"
 

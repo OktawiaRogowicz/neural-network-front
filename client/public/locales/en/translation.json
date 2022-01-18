@@ -27,7 +27,7 @@
     
     "welcome": "If you're here, that means you decided to help me with my Engineering Thesis. Thank you! :)\n\nThe aim of my BSc Thesis is to recreate game Quick, Draw! that Google has created. I will be creating a neural network, AI, that will try to guess if the drawn picture is correct with a given drawing prompt. But I collect the dataset myself - and that's exactly why I need help!\n\nThis website is created exactly because of that - your job is to draw the given word in 15 seconds ten times!\n\nDrawn pictures are AUTOMATICALLY sent to a server and database created by me in the moment you click CONTINUE button. SAVE exists, to save it locally - but that's back from the time that server has not existed yet, and I won't delete it for now. :)\n\nThat's all for now - but in a month I should link you a website on a which after each picture drawn, neural network taught on drawings drawn by all of you will try to guess them!\n\nReady?",
     
-    "draw_here": "Draw here! Double click to clear the canvas.",
+    "draw_here": "Draw here!",
     
     "times_up": "Time's up!\nContinue (or if you like your drawing very much, you can also save it. For me, it is sent to the server in the moment you continue!)"
     
