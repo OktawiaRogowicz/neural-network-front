@@ -24,7 +24,7 @@ function App() {
   const { t } = useTranslation();
   const listOfCategoriesEn = ['cookie', 'smartphone', 'carrot', 'broccoli', 'floor lamp', 'grass', 'moon', 'mug', 'sword', 'sun']
   const listOfCategories = [t('cookie'), t('smartphone'), t('carrot'), t('broccoli'), t('floor_lamp'), t('grass'), t('moon'), t('mug'), t('sword'), t('sun')]
-  const [index, setIndex] = useState(9)
+  const [index, setIndex] = useState(0)
   const [response, setResponse] = useState({results: 
     {
       "0": "loading...",
@@ -134,9 +134,9 @@ function App() {
         //zip.file(getWord() + ".png", blob, {base64: true}); 
       });
       var i = index;
-      setIndex(i - 1)
+      setIndex(i + 1)
     }
-    if(index == 0) {
+    if(index == 9) {
       setIsFinished(true)
     }
 
