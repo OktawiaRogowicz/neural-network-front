@@ -175,7 +175,7 @@ function preprocess()
   const normalized = resized.div(offset);
   var arrOld = normalized.dataSync();
   var arr = [];
-  for (var i = 3; i < arrOld.length; i=i+4) {
+  for (var i = 3; i < arrOld.length; i = i+4) {
     arr.push(1.0 - arrOld[i]);
   }
   var newTensor = tf.tensor(arr);
@@ -280,9 +280,8 @@ function preprocess()
   function CollapsibleText(props) {
     const isFinished = props.isFinished;
     const [showResults, setShowResults] = useState(true)
-    const [showText, setShowText] = useState(false)
 
-    const onClick = () => {setShowResults(false); setShowText(true)}
+    const onClick = () => {setShowResults(false);}
 
     if (!isFinished) {
       if (index == 0 )
@@ -293,8 +292,7 @@ function preprocess()
             <ResultsText/>
             <PlayButton style={{marginTop: '5vh'}} onClick={onClick}/>
           </div>
-        : null }
-        { showText ? <DrawText on={() => props.on()}/> : null }
+        : <DrawText on={() => props.on()}/> }
       </div>)
     }
     return (<div>
@@ -303,8 +301,7 @@ function preprocess()
           <ResultsText/>
           <PlayButton onClick={onClick}/>
         </div>
-      : null }
-      { showText ? <FinishedText /> : null }
+      : <FinishedText /> }
     </div>);
   }
 
@@ -329,7 +326,6 @@ function preprocess()
       marginBottom: 30
     },
   });
-
   const classes = useStyles();
 
   return (
