@@ -41,7 +41,6 @@ function App() {
 
   const [locale, setLocale] = useState('pl');
   i18n.on('languageChanged', (lng) => setLocale(i18n.language));
-  const [alignment, setAlignment] = useState('pl');
 
   const [changeCanvasBorder, createChangeCanvasBorder] = useState(()=>()=>{})
   const [clear, createClear] = useState(()=>()=>{})
@@ -236,10 +235,6 @@ function App() {
         </div>
       : <FinishedText /> }
     </div>);
-  }
-
-  function changeLocale (l) {
-    i18n.changeLanguage(l);
   }
 
   return (
