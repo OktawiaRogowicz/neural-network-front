@@ -12,12 +12,12 @@ import JSZip from 'jszip';
 import Axios from 'axios';
 import i18n from './i18n';
 import { useTranslation } from "react-i18next";
-import { t } from 'i18next';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import LocaleContext from './LocaleContext';
 import * as tf from "@tensorflow/tfjs"; 
 import { margin } from '@mui/system';
+import Canvas from './components/canvas/Canvas';
+import SelectLanguageButtons from './components/SelectLanguageButtons';
+import CollapsibleText from './components/instructions/CollapsibleText';
 
 
 function App() {
@@ -41,12 +41,11 @@ function App() {
 
   const [locale, setLocale] = useState('pl');
   i18n.on('languageChanged', (lng) => setLocale(i18n.language));
-  const [alignment, setAlignment] = useState('pl');
 
-  const canvasRef = useRef(null)
-  const contextRef = useRef(null)
+  const [changeCanvasBorder, createChangeCanvasBorder] = useState(()=>()=>{})
+  const [clear, createClear] = useState(()=>()=>{})
+  const [preprocess, createPreprocess] = useState(()=>()=>{})
 
-  const [isDrawing, setIsDrawing] = useState(false)
   const [isGameStarted, setIsGameStarted] = useState(false)
   const [isGameFinished, setIsGameFinished] = useState(false)
 
@@ -55,52 +54,8 @@ function App() {
 
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    canvas.width = 400;
-    canvas.height = 400;
-    canvas.style.width = `400px`;
-    canvas.style.height = `400px`;
-    canvas.style.border = '3px solid gold';
-    canvas.style.backgroundColor = '#fff';
-    canvas.scale = 1;
-
-    const context = canvas.getContext("2d")
-    context.scale(1,1)
-    context.lineCap = "round"
-    context.strokeStyle = "black"
-    context.lineWidth = 10
-    contextRef.current = context;
-  }, [])
-
-  const startDrawing = ({nativeEvent}) => {
-    const {offsetX, offsetY} = nativeEvent;
-    contextRef.current.beginPath()
-    contextRef.current.moveTo(offsetX, offsetY)
-    setIsDrawing(true)
-  }
-
   const getWord = () => { return listOfCategories[index]}
   const getWordEn = () => { return listOfCategoriesEn[index]}
-
-  const finishDrawing = () => {
-    contextRef.current.closePath()
-    setIsDrawing(false)
-  }
-
-  const draw = ({nativeEvent}) => {
-    if(!isDrawing) {
-      return
-    }
-    const {offsetX, offsetY} = nativeEvent;
-    contextRef.current.lineTo(offsetX, offsetY)
-    contextRef.current.stroke()
-  }
-
-  const clear = () => {
-    contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
-    contextRef.current.beginPath();
-  }
 
   const hideStart = () => {
     setIsStarted(false)
@@ -121,7 +76,6 @@ function App() {
             "8": "calculating ",
             "9": "calculating "
         }});
-
       recognise();
       var canvas = document.getElementById("my-canvas");
     
@@ -164,24 +118,6 @@ function App() {
         return error;
     });
   }
-
-function preprocess()
-{
-  const context = contextRef.current;
-  var imageData = context.getImageData(0, 0, 400, 400);
-  let tensor = tf.browser.fromPixels(imageData, 4);
-  const resized = tf.image.resizeBilinear(tensor, [100, 100]).toFloat();
-  const offset = tf.scalar(255.0);
-  const normalized = resized.div(offset);
-  var arrOld = normalized.dataSync();
-  var arr = [];
-  for (var i = 3; i < arrOld.length; i=i+4) {
-    arr.push(1.0 - arrOld[i]);
-  }
-  var newTensor = tf.tensor(arr);
-  var batched = tf.reshape(newTensor, [1, 100, 100, 1]);
-  return batched;
-}
 
   const recognise = async () => {
     var batched = preprocess();
@@ -235,103 +171,6 @@ function preprocess()
     }
   }
 
-  const changeCanvasBorder = (style) => {
-    const canvas = canvasRef.current;
-    canvas.style.border = style;
-  }
-
-  function DrawText(props) {
-    return (<div>
-      <p>{t('try1_try')}</p>
-      <h1>{getWord()}</h1>
-      <p style={{marginBottom: '5vh'}}>{t('try2_15s')}</p>
-      <PlayButton onClick={ () => { props.on(); setIsGameStarted(true) }}/>
-    </div>);
-  }
-  
-  function FinishedText(props) {
-    return (<div>
-      <p>{t('thats_all')}</p>
-      <p><b>{t('thanks_for_help')}</b><Emoji symbol="💛"/></p> 
-      <p style={{marginBottom: '5vh'}}>{t('play_again')}</p>
-      <div className='game-container-inner'>
-      <button className='button2' onClick={handleZipDownload}>{t('save')}</button> 
-      </div>
-      <div className='game-container-inner'>
-      <PlayButton onClick={ () => window.location.reload(true) }/>
-      </div>
-    </div>);
-  }
-
-  function ResultsText() {
-    const results = [];
-    if(index != 0 && response != undefined) {
-      for (let i = 0; i < 10; i++) {
-        var parsed = parseFloat(response.results[i]);
-        results.push(
-          <p key={i}> <b>{listOfCategories[i]}:</b> {isNaN(parsed) ? response.results[i] : parsed.toFixed(2) * 100.0}%</p>
-        );
-      }
-    }
-
-    return(<div>{results}</div>);
-  }
-
-  function CollapsibleText(props) {
-    const isFinished = props.isFinished;
-    const [showResults, setShowResults] = useState(true)
-    const [showText, setShowText] = useState(false)
-
-    const onClick = () => {setShowResults(false); setShowText(true)}
-
-    if (!isFinished) {
-      if (index == 0 )
-        return <DrawText on={() => props.on()}/>
-      return (<div>
-        { showResults ?
-          <div>
-            <ResultsText/>
-            <PlayButton style={{marginTop: '5vh'}} onClick={onClick}/>
-          </div>
-        : null }
-        { showText ? <DrawText on={() => props.on()}/> : null }
-      </div>)
-    }
-    return (<div>
-      { showResults ?
-        <div>
-          <ResultsText/>
-          <PlayButton onClick={onClick}/>
-        </div>
-      : null }
-      { showText ? <FinishedText /> : null }
-    </div>);
-  }
-
-  function changeLocale (l) {
-    i18n.changeLanguage(l);
-  }
-
-  const handleAlignment = (event, newAlignment) => {
-    if (newAlignment !== null) {
-      setAlignment(newAlignment);
-      changeLocale(newAlignment);
-    }
-  };
-
-  const useStyles = makeStyles({
-    root: {
-      background: 'linear-gradient(45deg, #FFD700 30%, #FFD700 90%)',
-      border: 0,
-      borderRadius: 3,
-      boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-      color: 'white',
-      marginBottom: 30
-    },
-  });
-
-  const classes = useStyles();
-
   return (
     <main>
       <LocaleContext.Provider value={{locale, setLocale}}>
@@ -345,20 +184,19 @@ function preprocess()
                   style={{
                     transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
                   }}>
-                    <CollapsibleText isFinished={isFinished} on={() => onToggle()}/>
+                    <CollapsibleText
+                      isFinished={isFinished}
+                      setIsGameStarted={setIsGameStarted} 
+                      getWord={getWord}
+                      handleZipDownload={handleZipDownload}
+                      on={() => onToggle()}
+                      index={index}
+                      response={response}/>
                   </div>
                 </div>
                 <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
                     <div className="welcome">
-                      <ToggleButtonGroup
-                        className={classes.root}
-                        value={alignment}
-                        exclusive
-                        onChange={handleAlignment}
-                      >
-                        <ToggleButton value="pl">Polski</ToggleButton>
-                        <ToggleButton value="en">English</ToggleButton>
-                      </ToggleButtonGroup>
+                      <SelectLanguageButtons/>
                       <p><b>{t('hi')}</b><Emoji symbol="👋"/></p> 
                       <p style={{marginBottom: '5vh'}}>{t('welcome')}</p>
                       <PlayButton onClick={ () => { onToggle(); hideStart(); startRound()}}/>
@@ -383,19 +221,12 @@ function preprocess()
                 <h1>{t('draw_here')}</h1>
               </div>
               <div className='game-container-inner'>
-                <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}
-                    onMouseUp={finishDrawing}
-                    onTouchEnd={finishDrawing}>
-                  <canvas id='my-canvas'
-                    onMouseDown={startDrawing}
-                    onTouchStart={startDrawing}
-                    onMouseUp={finishDrawing}
-                    onTouchEnd={finishDrawing}
-                    onMouseMove={draw}
-                    onTouchMove={draw}
-                    //onDoubleClick={clear}
-                    ref={canvasRef}
-                  />
+                <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
+                      <Canvas
+                        createClear={createClear}
+                        createChangeCanvasBorder={createChangeCanvasBorder}
+                        createPreprocess={createPreprocess}
+                      />
                 </div>
               </div>
                 <div style={ isGameFinished ? {} : { display: 'none' }}>
