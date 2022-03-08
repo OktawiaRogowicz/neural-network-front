@@ -3,17 +3,11 @@ import 'react-circular-progressbar/dist/styles.css';
 import {useContext, useState, useEffect, useRef} from "react";
 
 const red = '#f54e4e';
-const green = '#4aec8c';
 
 function Timer(props) {
 
-  const [isPaused, setIsPaused] = useState(false);
-  const [mode, setMode] = useState('work'); // work/break/null
   const [secondsLeft, setSecondsLeft] = useState(0);
-
   const secondsLeftRef = useRef(secondsLeft);
-  const isPausedRef = useRef(isPaused);
-
   const workMinutes = 0.25;
 
   function tick() {
@@ -31,8 +25,7 @@ function Timer(props) {
         return props.stop();
       }
       tick();
-    },1000);
-      console.log("HIR")
+    }, 1000);
 
     return () => clearInterval(interval);
   }, []);
@@ -42,7 +35,8 @@ function Timer(props) {
 
   const minutes = Math.floor(secondsLeft / 60);
   let seconds = secondsLeft % 60;
-  if(seconds < 10) seconds = '0'+seconds;
+  if (seconds < 10)
+    seconds = '0' + seconds;
 
   return (
     <div style={{width: 80, height: 80}}>
@@ -51,7 +45,7 @@ function Timer(props) {
         text={minutes + ':' + seconds}
         styles={buildStyles({
         textColor:'#fff',
-        pathColor:mode === 'work' ? red : green,
+        pathColor:red,
         trailColor:'#fff',
         strokeWidth: 10,
       })} />

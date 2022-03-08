@@ -15,20 +15,20 @@
     "try1_try": "Spróbuj narysować",
     "try2_15s": "w 15 sekund",
 
-    "thats_all": "To wszystko!\n\nObrazki zapisują się automatycznie na stworzonym przeze mnie serwerze.\nW razie błędów i uwag, skontaktuj się ze mną na Discordzie (Supernova#6608)\n\nZa około miesiąc powinna zaś powstać nowa wersja tego oto frontu - juz w formie zabawy z siecia neuronowa. ;)",
+    "thats_all": "To wszystko!\n\nObrazki zapisują się automatycznie na stworzonym przeze mnie serwerze.\nW razie błędów i uwag, skontaktuj się ze mną na Discordzie (Supernova#6608)",
 
     "thanks_for_help": "Dziękuję za pomoc!",
 
-    "play_again": "Jezeli chcesz zagrac ponownie - kliknij przycisk. Zeby pobrac zipa/paczke swoich plikow, kliknij Zapisz.",
+    "play_again": "Jezeli chcesz zagrac ponownie - kliknij przycisk. Zeby pobrac zipa/paczke swoich plikow, kliknij \"Zapisz\".",
 
     "save": "Zapisz",
 
-    "hi": "Hej!",
+    "hi": "Hej! ",
 
-    "welcome": "Skoro tutaj jesteś, zdecydował*ś się pomóc mi w pracy inzynierskiej. Dziękuję! :)\n\nCelem mojej pracy jest odtworzenie gry Quick, Draw!, którą stworzyło Google. Będę tworzyć sieć neurnonową, czyli AI, które spróbuje rozpoznać, czy narysowano obrazek zgodny z wylosowanym tematem. Ale bazę danych zbieram sama - i dlatego właśnie potrzebuję pomocy!\n\nTa strona jest stworzona właśnie po to - twoim zadaniem będzie dziesięć razy w przeciągu 15 sekund narysować otrzymane hasło!\n\nNarysowane rysunki AUTOMATYCZNIE lądują na stworzonym przeze mnie serwerze i bazie danych w momencie, w którym klikasz przycisk DALEJ. ZAPISZ istnieje, by zapisac go lokalnie - ale to jeszcze z czasow, gdy serwera nie bylo, ale na razie nie bede go usuwac. :)\n\nZabawa na razie na rysowaniu się kończy - ale za to za miesiąc powinnam zarzucić stroną, na której po kazdym rysunku sieć będzie próbowała go odgadnąć, a do nauczenia jej tego uzyte były obrazki was wszystkich!\n\nGotów?",
+    "welcome": "Zawsze lubiłam rysować, a w dwóch ostatnich semestrach studiów zainteresowałam się tematem sieci neuronowych. Skutkiem jest “Quick, help!” - efekt mojej pracy inżynierskiej, która łączy te dwa tematy, odtwarzając grę Google “Quick, Draw!”.\n\nZabawa polega na grze w kalambury ze stworzoną przeze mnie sztuczną inteligencją - czyli siecią neuronową. Podczas dziesięciu rund, twoim zadaniem będzie narysowanie dziesięciu podanych haseł, a zadaniem mojego AI - odgadnięcie, co zostało narysowane.\n\n“Quick, help!” było jednocześnie moją pierwszą stycznością z JavaScriptem i Reactem, a także inicjatorem pomysłu, by spróbować przebranżowić się na front-end developera. Strona jest cały czas w rozwoju, chociaż teraz rozkładam czas pomiędzy kilka projektów - ale mam jeszcze kilka pomysłów, które chciałabym tutaj wdrożyć.\n\nPrzebieg prac możesz zobaczyć w Projects na listach To-do w moim repozytorium: xxx. Aktualnie pracuję nad galerią wykonanych prac!\n\n\nGotów?",
 
     "draw_here": "Rysuj tutaj!",
 
-    "times_up": "Czas się skończył!\nKontynuuj (lub jezeli twój obrazek ci się wyjątkowo podoba, mozesz go równiez sobie zapisać. U mnie wyląduje na serwerze w momencie kontynuacji!)"
+    "times_up": "Czas się skończył!\nKontynuuj (lub jezeli twój obrazek ci się wyjątkowo podoba, mozesz go równiez sobie zapisać. Na serwerze wyląduje jednak w momencie kontynuacji!)"
 
 }

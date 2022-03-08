@@ -1,11 +1,9 @@
-const express = require('express');
+const path = require('path');
 const tf = require("@tensorflow/tfjs");
 const tfn = require ("@tensorflow/tfjs-node")
-
+const express = require('express');
 const app = express();
-const path = require('path');
 const { cloudinary } = require('./utils/cloudinary');
-
 var cors = require('cors');
 
 app.use(express.static(path.join(__dirname, 'client/build')));

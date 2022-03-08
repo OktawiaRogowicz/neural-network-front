@@ -15,20 +15,20 @@
     "try1_try": "Try to draw",
     "try2_15s": "in 15 seconds",
     
-    "thats_all": "That's all!\n\nPictures are automatically sent to a server created by me.\nIn case of bugs or suggestions, contact me on Discord (Supernova#6608)\n\nIn a month there should be a new version of this front - this time in a form of an actual game with neural network! ;)",
+    "thats_all": "That's all!\n\nPictures are automatically sent to a server created by me.\nIn case of bugs or suggestions, contact me on Discord (Supernova#6608)",
     
     "thanks_for_help": "Thanks for your help!",
     
-    "play_again": "If you want to play again - click the button. To download a zip of your files, click Save.",
+    "play_again": "If you want to play again - click the button. To download a zip of your files, click \"Save\".",
     
     "save": "Save",
     
-    "hi": "Hi!",
+    "hi": "Hi! ",
     
-    "welcome": "If you're here, that means you decided to help me with my Engineering Thesis. Thank you! :)\n\nThe aim of my BSc Thesis is to recreate game Quick, Draw! that Google has created. I will be creating a neural network, AI, that will try to guess if the drawn picture is correct with a given drawing prompt. But I collect the dataset myself - and that's exactly why I need help!\n\nThis website is created exactly because of that - your job is to draw the given word in 15 seconds ten times!\n\nDrawn pictures are AUTOMATICALLY sent to a server and database created by me in the moment you click CONTINUE button. SAVE exists, to save it locally - but that's back from the time that server has not existed yet, and I won't delete it for now. :)\n\nThat's all for now - but in a month I should link you a website on a which after each picture drawn, neural network taught on drawings drawn by all of you will try to guess them!\n\nReady?",
+    "welcome": "I’ve always liked to draw, and during the last two semesters of my studies I’ve also developed interest in neural networks. The result is “Quick, help!” - the effect of my BCs thesis, which mixes these two topics, recreating Google’s game “Quick, Draw!”.\n\nIt is a game of charades - but with AI, a neural network, created by me. During ten rounds your job will be to draw ten given prompts, and my AI’s job will be to try and recognise what has been drawn.\n\n”Quick, help!” was also my first experience using JavaScript and React, as well as the initial reason standing behind the thought of rebranding to a front-end developer. The page is still under construction, but now I distribute my time for few other projects. However I have few more ideas I would love to include here!\n\nYou can observe work in progress by checking out Projects’ to-do lists in my GitHub repository: xxx. Right now, I am working on a gallery of pictures created!\n\n\nReady?",
     
     "draw_here": "Draw here!",
     
-    "times_up": "Time's up!\nContinue (or if you like your drawing very much, you can also save it. For me, it is sent to the server in the moment you continue!)"
+    "times_up": "Time's up!\nContinue (or if you like your drawing very much, you can also save it. However, it is sent to the server in the moment you continue!)"
     
     }
