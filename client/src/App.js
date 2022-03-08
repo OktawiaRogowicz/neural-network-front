@@ -44,9 +44,6 @@ function App() {
   i18n.on('languageChanged', (lng) => setLocale(i18n.language));
   const [alignment, setAlignment] = useState('pl');
 
-  const canvasRef = useRef(null)
-  const contextRef = useRef(null)
-
   const [changeCanvasBorder, createChangeCanvasBorder] = useState(()=>()=>{})
   const [clear, createClear] = useState(()=>()=>{})
   const [preprocess, createPreprocess] = useState(()=>()=>{})
