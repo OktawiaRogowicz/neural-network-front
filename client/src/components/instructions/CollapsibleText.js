@@ -36,13 +36,12 @@ const FinishedText = ({handleZipDownload}) => {
   );
 }
 
-const DrawText = ({setIsGameStarted, getWord, on}) => {
-
+const DrawText = ({setIsGameStarted, getWord, on, setShowResults}) => {
   const { t } = useTranslation();
-
   const onClickEvent = () => {
       on()
       setIsGameStarted(true)
+      setShowResults(true);
   }
 
   return ( 
@@ -55,27 +54,28 @@ const DrawText = ({setIsGameStarted, getWord, on}) => {
    );
 }
 
-const CollapsibleText = ({isFinished, setIsGameStarted, getWord, handleZipDownload, on, index}) => {
+const CollapsibleText = ({isFinished, setIsGameStarted, getWord, handleZipDownload, on, index, response}) => {
     const [showResults, setShowResults] = useState(true)
-
     const onClick = () => {setShowResults(false);}
+
+    console.log(isFinished, index, showResults);
 
     if (!isFinished) {
       if (index == 0 )
-        return <DrawText setIsGameStarted={setIsGameStarted} getWord={getWord} on={on} />
+        return <DrawText setIsGameStarted={setIsGameStarted} getWord={getWord} on={on} setShowResults={setShowResults}/>
       return (<div>
         { showResults ?
           <div>
-            <ResultsText/>
+            <ResultsText response={response} index={index}/>
             <PlayButton style={{marginTop: '5vh'}} onClick={onClick}/>
           </div>
-        : <DrawText setIsGameStarted={setIsGameStarted} getWord={getWord} on={on} /> }
+        : <DrawText setIsGameStarted={setIsGameStarted} getWord={getWord} on={on} setShowResults={setShowResults}/> }
       </div>)
     }
     return (<div>
       { showResults ?
         <div>
-          <ResultsText/>
+          <ResultsText response={response} index={index}/>
           <PlayButton onClick={onClick}/>
         </div>
       : <FinishedText handleZipDownload={handleZipDownload} /> }

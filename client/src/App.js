@@ -76,7 +76,6 @@ function App() {
             "8": "calculating ",
             "9": "calculating "
         }});
-
       recognise();
       var canvas = document.getElementById("my-canvas");
     
@@ -185,7 +184,14 @@ function App() {
                   style={{
                     transform: `translateY(${Math.round(20 * (-1 + progress))}px)`
                   }}>
-                    <CollapsibleText isFinished={isFinished} on={() => onToggle()}/>
+                    <CollapsibleText
+                      isFinished={isFinished}
+                      setIsGameStarted={setIsGameStarted} 
+                      getWord={getWord}
+                      handleZipDownload={handleZipDownload}
+                      on={() => onToggle()}
+                      index={index}
+                      response={response}/>
                   </div>
                 </div>
                 <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
