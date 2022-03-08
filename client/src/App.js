@@ -13,12 +13,11 @@ import Axios from 'axios';
 import i18n from './i18n';
 import { useTranslation } from "react-i18next";
 import { t } from 'i18next';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import LocaleContext from './LocaleContext';
 import * as tf from "@tensorflow/tfjs"; 
 import { margin } from '@mui/system';
 import Canvas from './components/canvas/Canvas';
+import SelectLanguageButtons from './components/SelectLanguageButtons';
 
 
 function App() {
@@ -243,25 +242,6 @@ function App() {
     i18n.changeLanguage(l);
   }
 
-  const handleAlignment = (event, newAlignment) => {
-    if (newAlignment !== null) {
-      setAlignment(newAlignment);
-      changeLocale(newAlignment);
-    }
-  };
-
-  const useStyles = makeStyles({
-    root: {
-      background: 'linear-gradient(45deg, #FFD700 30%, #FFD700 90%)',
-      border: 0,
-      borderRadius: 3,
-      boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-      color: 'white',
-      marginBottom: 30
-    },
-  });
-  const classes = useStyles();
-
   return (
     <main>
       <LocaleContext.Provider value={{locale, setLocale}}>
@@ -280,15 +260,7 @@ function App() {
                 </div>
                 <div style={isStarted ? {height: "100vh"} : { height: "100vh", display: 'none' }}>
                     <div className="welcome">
-                      <ToggleButtonGroup
-                        className={classes.root}
-                        value={alignment}
-                        exclusive
-                        onChange={handleAlignment}
-                      >
-                        <ToggleButton value="pl">Polski</ToggleButton>
-                        <ToggleButton value="en">English</ToggleButton>
-                      </ToggleButtonGroup>
+                      <SelectLanguageButtons/>
                       <p><b>{t('hi')}</b><Emoji symbol="👋"/></p> 
                       <p style={{marginBottom: '5vh'}}>{t('welcome')}</p>
                       <PlayButton onClick={ () => { onToggle(); hideStart(); startRound()}}/>
