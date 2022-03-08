@@ -18,6 +18,7 @@ import { makeStyles } from '@mui/styles';
 import LocaleContext from './LocaleContext';
 import * as tf from "@tensorflow/tfjs"; 
 import { margin } from '@mui/system';
+import Canvas from './components/canvas/Canvas';
 
 
 function App() {
@@ -46,7 +47,10 @@ function App() {
   const canvasRef = useRef(null)
   const contextRef = useRef(null)
 
-  const [isDrawing, setIsDrawing] = useState(false)
+  const [changeCanvasBorder, createChangeCanvasBorder] = useState(()=>()=>{})
+  const [clear, createClear] = useState(()=>()=>{})
+  const [preprocess, createPreprocess] = useState(()=>()=>{})
+
   const [isGameStarted, setIsGameStarted] = useState(false)
   const [isGameFinished, setIsGameFinished] = useState(false)
 
@@ -55,52 +59,8 @@ function App() {
 
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    canvas.width = 400;
-    canvas.height = 400;
-    canvas.style.width = `400px`;
-    canvas.style.height = `400px`;
-    canvas.style.border = '3px solid gold';
-    canvas.style.backgroundColor = '#fff';
-    canvas.scale = 1;
-
-    const context = canvas.getContext("2d")
-    context.scale(1,1)
-    context.lineCap = "round"
-    context.strokeStyle = "black"
-    context.lineWidth = 10
-    contextRef.current = context;
-  }, [])
-
-  const startDrawing = ({nativeEvent}) => {
-    const {offsetX, offsetY} = nativeEvent;
-    contextRef.current.beginPath()
-    contextRef.current.moveTo(offsetX, offsetY)
-    setIsDrawing(true)
-  }
-
   const getWord = () => { return listOfCategories[index]}
   const getWordEn = () => { return listOfCategoriesEn[index]}
-
-  const finishDrawing = () => {
-    contextRef.current.closePath()
-    setIsDrawing(false)
-  }
-
-  const draw = ({nativeEvent}) => {
-    if(!isDrawing) {
-      return
-    }
-    const {offsetX, offsetY} = nativeEvent;
-    contextRef.current.lineTo(offsetX, offsetY)
-    contextRef.current.stroke()
-  }
-
-  const clear = () => {
-    contextRef.current.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height)
-    contextRef.current.beginPath();
-  }
 
   const hideStart = () => {
     setIsStarted(false)
@@ -165,24 +125,6 @@ function App() {
     });
   }
 
-function preprocess()
-{
-  const context = contextRef.current;
-  var imageData = context.getImageData(0, 0, 400, 400);
-  let tensor = tf.browser.fromPixels(imageData, 4);
-  const resized = tf.image.resizeBilinear(tensor, [100, 100]).toFloat();
-  const offset = tf.scalar(255.0);
-  const normalized = resized.div(offset);
-  var arrOld = normalized.dataSync();
-  var arr = [];
-  for (var i = 3; i < arrOld.length; i = i+4) {
-    arr.push(1.0 - arrOld[i]);
-  }
-  var newTensor = tf.tensor(arr);
-  var batched = tf.reshape(newTensor, [1, 100, 100, 1]);
-  return batched;
-}
-
   const recognise = async () => {
     var batched = preprocess();
     const dataArray = batched.arraySync();
@@ -233,11 +175,6 @@ function preprocess()
     } catch (error) {
       console.log(error);
     }
-  }
-
-  const changeCanvasBorder = (style) => {
-    const canvas = canvasRef.current;
-    canvas.style.border = style;
   }
 
   function DrawText(props) {
@@ -379,19 +316,12 @@ function preprocess()
                 <h1>{t('draw_here')}</h1>
               </div>
               <div className='game-container-inner'>
-                <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}
-                    onMouseUp={finishDrawing}
-                    onTouchEnd={finishDrawing}>
-                  <canvas id='my-canvas'
-                    onMouseDown={startDrawing}
-                    onTouchStart={startDrawing}
-                    onMouseUp={finishDrawing}
-                    onTouchEnd={finishDrawing}
-                    onMouseMove={draw}
-                    onTouchMove={draw}
-                    //onDoubleClick={clear}
-                    ref={canvasRef}
-                  />
+                <div className='canvas-container' style={ !isGameFinished ? {} : { cursor: 'not-allowed', pointerEvents: 'none' }}>
+                      <Canvas
+                        createClear={createClear}
+                        createChangeCanvasBorder={createChangeCanvasBorder}
+                        createPreprocess={createPreprocess}
+                      />
                 </div>
               </div>
                 <div style={ isGameFinished ? {} : { display: 'none' }}>
