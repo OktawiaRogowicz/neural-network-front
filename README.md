@@ -1,70 +1,83 @@
-# Getting Started with Create React App
+<h2 align="center">
+  
+  🖼️ <code>QUICK, HELP!</code> 🖼️
+  
+  Web application categorizing hand drawn pictures and shapes using neural network
+  
+  🧠
+  
+  <code>front-end</code> </h2>
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<div align="center">
+This is front-end respository for my thesis. <a href="https://github.com/OktawiaRogowicz/neuralNetwork">Front-end can be viewed here</a>! 
 
-## Available Scripts
+The aim of the project as a whole is an implementation of a website allowing its users to play cha-
+  rades with a neural network, similarly to Google’s <b>Quick, Draw!</b>. 
+  
+.
 
-In the project directory, you can run:
+<strong>Heroku</strong>: <a href="neural-network-react.herokuapp.com"><strong>LIVE SITE</strong></a>
+</div>
 
-### `npm start`
+<h1><code>Overview</code></h1>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+> Front-end part of the project has been designed using JavaScript and its library React. It
+allows not only to game, but also to collect all drawn pictures, categorizing each one of
+them accordingly. Collected data is saved in a data base created in Cloudinary. During
+the development process, about 1000 unique images drawn by individual users has been
+collected, which then have been subjected to data augmentation. The neural network’s
+accuracy oscillates around 81%.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+> After starting the game, the exchange with neural network starts. During ten rounds,
+the player has the task to draw ten drawing prompts, which neural network then tries to
+categorize correctly. The user then can look into its results and errors, and eventually -
+play again.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+<div align="center">
+  <img src="https://github.com/OktawiaRogowicz/ip-address-tracker/blob/main/src/ip-address-tracker-master/img.png"
+    alt="Screenshot" width="500"/>
+</div>
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<div align="center">
+  HTML <strong>||</strong> CSS <strong>||</strong> flexbox <strong>||</strong> React <strong>||</strong> Styled components
+  
+  IP geolocation API <strong>||</strong> Leaflet
+  
+<strong>Heroku</strong>: <a href="neural-network-react.herokuapp.com"><strong>LIVE SITE</strong></a>
+</div>
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+To make my project possible, I needed to divide it into three parts.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<code>first part</code>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+As one of the premises was training my own neural network, I needed big enough database, as anything less than one hundred images per category will not be useful. To collect my own database, I decided to create a website, on which players will be able to help me collect pictures for the neural network, <b>second part</b> of the project - thus the name of the project, back from the times when I promoted it online.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+<code>second part</code>
+...was creating neural network. After deciding on the architecture, I wrote few scripts - that can be viewed in the root folder - preprocessing collected images into much more accessible contect. Afterwards, using TensorFlow and Keras, I trained a neural network with a success rate oscillating around 81%. 
 
-## Learn More
+<code>third part</code>
+Putting together neural network and a website prepared before. Using TensorFlow.js and Node.js, I let the user to exchange data with my neural network - and finished the game. Afterwards, thanks to JavaScript, I was able to put a few more details into the page.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Summary
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Each game lasts ten round, and every round takes fifteen seconds. At the start, player is given word prompt, then sees the canvas and timer, and after proceeding to the next page the gamer then can look into the judgement and mistakes of AI, with the possibility of given drawing being either category shown each in a new line.
 
-### Code Splitting
+Programmatically, this process starts a little bit earlier. When clicking the "Next" button, the image drawn by the user is processed into a tensor keeping its size and number of layers: 4 layers 400 pixels wide and 400 pixels high. After scaling the drawing down to one hundred pixels high and wide to match the neural network's input size, each pixel's value is further divided by 255 to keep them between 0 and 1. Four layers result from using HTML canvas: each image produced has an alpha channel responsible for transparency but is not needed in this case. After flattening the tensor, only each fourth variable is given to the neural network, which at the same time is the end of the process of data preparation. Besides all that, using Cloudinary Uploader, the image – that at this point has been transformed to be base 64 encoded – is also sent to the database. Thanks to custom upload presets assigned to each user, sending the image is a matter of preparing a POST request using Express.js functionality.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### What I learned
 
-### Analyzing the Bundle Size
+Reasons to do this project were pretty simple - it is something I wanted to learn and try out, so I did. As it turns out, the knowledge is not only practical and beneficial, but the process of learning, for me, was also simply enjoyable and amusing. I found JavaScript and React easy to use, with great possibilities, and neural networks fascinating – observation of expanding database and how the network's thought process alternates with each change was absorbing and informative.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Continued development
 
-### Making a Progressive Web App
+In the original Google's <b>Quick, Draw!</b> game images are predicted in real-time. Making it work with the current database would be problematic; however, rebuilding the code accordingly and collecting new data would be possible. In such a case, real-time predictions could happen and using recursive neural networks to guess how player's next line could be drawn.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+<h1><code>Author</code></h1>
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- Website - [Add your name here](https://www.your-site.com)
+- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
